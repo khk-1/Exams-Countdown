@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جدول الاختبارات النهائية</title>
+    <title>متابعة المهام والاختبارات</title>
     <style>
         body {
             background-color: #0f172a;
@@ -15,8 +15,20 @@
             flex-direction: column;
             align-items: center;
         }
-        h1 { color: #38bdf8; margin-bottom: 10px; }
-        .subtitle { margin-bottom: 30px; color: #94a3b8; }
+        h1 { color: #38bdf8; margin-bottom: 5px; }
+        .section-title {
+            width: 100%;
+            max-width: 1100px;
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #334155;
+            color: #38bdf8;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .assignments-title { color: #a78bfa; border-color: #4c1d95; }
         
         .grid-container {
             display: grid;
@@ -32,74 +44,93 @@
             border: 1px solid #334155;
             text-align: center;
             position: relative;
+            transition: 0.3s;
         }
-        .subject-name { font-size: 1.3rem; font-weight: bold; margin-bottom: 5px; color: #f1f5f9; }
-        .exam-date { font-size: 1rem; color: #38bdf8; margin-bottom: 15px; font-weight: bold; }
+        .card:hover { transform: translateY(-5px); }
+        .exam-card { border-left: 5px solid #38bdf8; }
+        .task-card { border-left: 5px solid #a78bfa; }
+
+        .subject-name { font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; }
+        .date-display { font-size: 1rem; color: #94a3b8; margin-bottom: 15px; font-weight: bold; }
+        
         .timer {
             background: #0f172a;
-            padding: 15px;
+            padding: 12px;
             border-radius: 12px;
             font-family: 'Courier New', monospace;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #fbbf24;
             font-weight: bold;
             display: flex;
             justify-content: space-around;
         }
-        .time-unit { font-size: 0.7rem; color: #94a3b8; display: block; }
+        .time-unit { font-size: 0.65rem; color: #64748b; display: block; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <h1>⏳ العد التنازلي للفاينل</h1>
-    <p class="subtitle">التواريخ بالميلادي (Day/Month)</p>
+    <h1>🚀 لوحة المتابعة الدراسية</h1>
 
+    <!-- قسم الواجبات والمهام (تظهر أولاً لأن مواعيدها أقرب) -->
+    <div class="section-title assignments-title">📋 الواجبات والمهام القادمة</div>
+    <div id="taskList" class="grid-container"></div>
+
+    <!-- قسم الاختبارات النهائية -->
+    <div class="section-title">🎓 الاختبارات النهائية (Finals)</div>
     <div id="examList" class="grid-container"></div>
 
     <script>
-        // القائمة بنفس تواريخك بالضبط (ميلادي)
+        // بيانات الاختبارات النهائية
         const exams = [
-            { name: "FINAL Practical Networks & Programming", date: "2026-05-18T08:00:00", displayDate: "18 / 5" },
-            { name: "FINAL Theory Networks", date: "2026-06-04T08:00:00", displayDate: "4 / 6" },
-            { name: "FINAL IOT", date: "2026-06-07T08:00:00", displayDate: "7 / 6" },
-            { name: "FINAL Tanqeeb", date: "2026-06-09T08:00:00", displayDate: "9 / 6" },
-            { name: "FINAL Theory Programming", date: "2026-06-11T08:00:00", displayDate: "11 / 6" },
-            { name: "FINAL Cloud Computing", date: "2026-06-14T08:00:00", displayDate: "14 / 6" },
-            { name: "FINAL Ethics", date: "2026-06-16T08:00:00", displayDate: "16 / 6" }
+            { name: "Practical Networks & Programming", date: "2026-05-18T08:00:00", display: "18 / 5" },
+            { name: "Theory Networks", date: "2026-06-04T08:00:00", display: "4 / 6" },
+            { name: "IOT", date: "2026-06-07T08:00:00", display: "7 / 6" },
+            { name: "Tanqeeb", date: "2026-06-09T08:00:00", display: "9 / 6" },
+            { name: "Theory Programming", date: "2026-06-11T08:00:00", display: "11 / 6" },
+            { name: "Cloud Computing", date: "2026-06-14T08:00:00", display: "14 / 6" },
+            { name: "Ethics", date: "2026-06-16T08:00:00", display: "16 / 6" }
         ];
 
-        const examList = document.getElementById('examList');
+        // بيانات الواجبات والكويزات
+        const tasks = [
+            { name: "Prac Quiz Networks (1)", date: "2026-05-10T08:00:00", display: "10 / 5" },
+            { name: "Prac Quiz Networks (2)", date: "2026-05-12T08:00:00", display: "12 / 5" },
+            { name: "Quiz Theory Networks", date: "2026-05-13T08:00:00", display: "13 / 5" },
+            { name: "Cloud Computing Project", date: "2026-05-18T08:00:00", display: "18 / 5" },
+            { name: "Assignment IOT", date: "2026-05-25T08:00:00", display: "25 / 5" },
+            { name: "Project Theory Networks", date: "2026-05-31T08:00:00", display: "31 / 5" },
+            { name: "Practical Networks Case Study", date: "2026-06-02T08:00:00", display: "2 / 6" }
+        ];
 
-        exams.forEach((exam, index) => {
-            const cardId = `timer-${index}`;
-            
-            examList.innerHTML += `
-                <div class="card">
-                    <div class="subject-name">${exam.name}</div>
-                    <div class="exam-date">التاريخ: ${exam.displayDate}</div>
-                    <div class="timer" id="${cardId}">جاري الحساب...</div>
-                </div>
-            `;
-            startTimer(exam.date, cardId);
-        });
+        function createCards(data, containerId, cardClass) {
+            const container = document.getElementById(containerId);
+            data.forEach((item, index) => {
+                const id = `${containerId}-${index}`;
+                container.innerHTML += `
+                    <div class="card ${cardClass}">
+                        <div class="subject-name">${item.name}</div>
+                        <div class="date-display">موعدنا: ${item.display}</div>
+                        <div class="timer" id="${id}">جاري الحساب...</div>
+                    </div>
+                `;
+                startTimer(item.date, id);
+            });
+        }
 
         function startTimer(targetDate, elementId) {
             const countDownDate = new Date(targetDate).getTime();
             const x = setInterval(function() {
                 const now = new Date().getTime();
                 const distance = countDownDate - now;
-
                 if (distance < 0) {
                     clearInterval(x);
-                    document.getElementById(elementId).innerHTML = "بدأ الاختبار! 📝";
+                    document.getElementById(elementId).innerHTML = "تم التسليم / بدأ الاختبار ✅";
                     return;
                 }
-
                 const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
                 document.getElementById(elementId).innerHTML = `
                     <div>${days}<span class="time-unit">يوم</span></div>
                     <div>${hours}<span class="time-unit">ساعة</span></div>
@@ -108,6 +139,10 @@
                 `;
             }, 1000);
         }
+
+        // تشغيل البطاقات
+        createCards(tasks, 'taskList', 'task-card');
+        createCards(exams, 'examList', 'exam-card');
     </script>
 </body>
 </html>
