@@ -16,6 +16,7 @@
             align-items: center;
         }
         h1 { color: #38bdf8; margin-bottom: 5px; }
+        #current-date { color: #94a3b8; font-size: 1.2rem; margin-bottom: 20px; }
         .section-title {
             width: 100%;
             max-width: 1100px;
@@ -70,70 +71,26 @@
 <body>
 
     <h1>🚀 لوحة المتابعة الدراسية</h1>
-    <h1>MONTH/DAY</h1>
-    <!-- قسم الواجبات والمهام (تظهر أولاً لأن مواعيدها أقرب) -->
-  
+    <div id="current-date">جاري تحميل التاريخ الحالي...</div>
 
-    <!-- قسم الاختبارات النهائية -->
+    <div class="section-title assignments-title">📝 الواجبات والكويزات</div>
+    <div id="taskList" class="grid-container"></div>
+
     <div class="section-title">🎓 الاختبارات النهائية (Finals)</div>
     <div id="examList" class="grid-container"></div>
 
     <script>
-        // بيانات الاختبارات النهائية
-        const exams = [
-        
-            { name: "Theory Networks", date: "2026-06-04T08:00:00", display: "4 / 6" },
-            { name: "IOT", date: "2026-06-07T08:00:00", display: "7 / 6" },
-            { name: "Tanqeeb", date: "2026-06-09T08:00:00", display: "9 / 6" },
-            { name: "Theory Programming", date: "2026-06-11T08:00:00", display: "11 / 6" },
-            { name: "Cloud Computing", date: "2026-06-14T08:00:00", display: "14 / 6" },
-            { name: "Ethics", date: "2026-06-16T08:00:00", display: "16 / 6" }
+        // Display current date in header
+        const today = new Date();
+        document.getElementById('current-date').innerText = `اليوم: ${today.getDate()} / ${today.getMonth() + 1} / ${today.getFullYear()}`;
+
+        // بيانات الواجبات والكويزات (يمكنك تركها فارغة أو إضافة عناصر بها)
+        const tasks = [
+            { name: "كويز شبكات تجريبي", date: "2026-06-05T12:00:00", display: "5 / 6" }
         ];
 
-        // بيانات الواجبات والكويزات
-        
-
-        function createCards(data, containerId, cardClass) {
-            const container = document.getElementById(containerId);
-            data.forEach((item, index) => {
-                const id = `${containerId}-${index}`;
-                container.innerHTML += `
-                    <div class="card ${cardClass}">
-                        <div class="subject-name">${item.name}</div>
-                        <div class="date-display">موعدنا: ${item.display}</div>
-                        <div class="timer" id="${id}">جاري الحساب...</div>
-                    </div>
-                `;
-                startTimer(item.date, id);
-            });
-        }
-
-        function startTimer(targetDate, elementId) {
-            const countDownDate = new Date(targetDate).getTime();
-            const x = setInterval(function() {
-                const now = new Date().getTime();
-                const distance = countDownDate - now;
-                if (distance < 0) {
-                    clearInterval(x);
-                    document.getElementById(elementId).innerHTML = "تم التسليم / بدأ الاختبار ✅";
-                    return;
-                }
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                document.getElementById(elementId).innerHTML = `
-                    <div>${days}<span class="time-unit">يوم</span></div>
-                    <div>${hours}<span class="time-unit">ساعة</span></div>
-                    <div>${minutes}<span class="time-unit">دقيقة</span></div>
-                    <div>${seconds}<span class="time-unit">ثانية</span></div>
-                `;
-            }, 1000);
-        }
-
-        // تشغيل البطاقات
-        createCards(tasks, 'taskList', 'task-card');
-        createCards(exams, 'examList', 'exam-card');
-    </script>
-</body>
-</html>
+        // بيانات الاختبارات النهائية
+        const exams = [
+            { name: "Theory Networks", date: "2026-06-04T08:00:00", display: "4 / 6" },
+            { name: "IOT", date: "2026-06-07T08:00:00", display: "7 / 6" },
+            { name: "Tanqeeb", date: "2026-06-09T08:00:00", display: "9 /
