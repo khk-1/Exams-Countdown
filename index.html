@@ -3,191 +3,258 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>عداد الايتي</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>عداد الايتي | لوحة المتابعة الحديثة</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:#0a0a0f; --bg2:#111118; --card:#16161f;
-    --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
-    --accent:#6c63ff; --accent2:#a78bfa;
-    --text:#f0f0ff; --text2:#9090b0; --text3:#5a5a7a;
-    --success:#34d399; --danger:#f87171;
+    --bg: #090d16; 
+    --bg-gradient: radial-gradient(circle at 50% 0%, #141f36 0%, #090d16 100%);
+    --card: rgba(22, 32, 54, 0.7); 
+    --card-hover: rgba(30, 45, 77, 0.9);
+    --border: rgba(255, 255, 255, 0.05); 
+    --border2: rgba(255, 255, 255, 0.12);
+    --accent: #4f46e5; 
+    --accent2: #818cf8;
+    --text: #f8fafc; 
+    --text2: #94a3b8; 
+    --text3: #64748b;
+    --success: #10b981; 
+    --danger: #ef4444;
+    --card-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
   }
+  
   .light {
-    --bg:#f5f5fa; --bg2:#eaeaf2; --card:#ffffff;
-    --border:rgba(0,0,0,0.07); --border2:rgba(0,0,0,0.13);
-    --accent:#6c63ff; --accent2:#7c3aed;
-    --text:#1a1a2e; --text2:#555575; --text3:#9090b0;
-    --success:#059669; --danger:#dc2626;
+    --bg: #f8fafc; 
+    --bg-gradient: radial-gradient(circle at 50% 0%, #eff6ff 0%, #f8fafc 100%);
+    --card: rgba(255, 255, 255, 0.85); 
+    --card-hover: rgba(255, 255, 255, 1);
+    --border: rgba(0, 0, 0, 0.04); 
+    --border2: rgba(0, 0, 0, 0.08);
+    --accent: #4f46e5; 
+    --accent2: #4f46e5;
+    --text: #0f172a; 
+    --text2: #475569; 
+    --text3: #94a3b8;
+    --success: #059669; 
+    --danger: #dc2626;
+    --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family:'IBM Plex Sans Arabic',sans-serif;
-    background:var(--bg); color:var(--text);
-    min-height:100vh; transition:background .3s,color .3s; overflow-x:hidden;
-    padding-bottom:110px;
-  }
-  body::before {
-    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
-    background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
-    background-size:40px 40px;
-  }
-  .container { max-width:900px; margin:0 auto; padding:2rem 1.5rem; position:relative; z-index:1; }
 
-  header { display:flex; align-items:center; justify-content:space-between; margin-bottom:3rem; }
-  .logo { font-size:1.6rem; font-weight:700; }
-  .logo span { color:var(--accent2); }
-  .theme-btn {
-    background:var(--card); border:1px solid var(--border2); border-radius:50px;
-    padding:8px 12px; font-size:18px; cursor:pointer; transition:all .2s; line-height:1;
+  * { margin:0; padding:0; box-sizing:border-box; }
+  
+  body {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    background: var(--bg);
+    background-image: var(--bg-gradient);
+    color: var(--text);
+    min-height: 100vh; 
+    transition: background .3s, color .3s; 
+    overflow-x: hidden;
+    padding-bottom: 120px;
   }
-  .theme-btn:hover { border-color:var(--accent); }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; position: relative; z-index: 1; }
+
+  header { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    margin-bottom: 3.5rem; 
+    border-bottom: 1px solid var(--border2);
+    padding-bottom: 1.5rem;
+  }
+  
+  .logo { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.5px; }
+  .logo span { color: var(--accent2); position: relative; }
+  .logo span::after {
+    content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 3px;
+    background: var(--accent2); border-radius: 2px;
+  }
+  
+  .theme-btn {
+    background: var(--card); border: 1px solid var(--border2); border-radius: 14px;
+    padding: 10px 14px; font-size: 18px; cursor: pointer; transition: all .3s ease;
+    box-shadow: var(--card-shadow);
+  }
+  .theme-btn:hover { border-color: var(--accent2); transform: scale(1.05); }
 
   .subjects-grid {
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:16px; margin-bottom:2rem;
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 24px; 
+    margin-bottom: 2rem;
   }
 
   .subject-card {
-    background:var(--card); border:1px solid var(--border); border-radius:16px;
-    padding:1.25rem 1.5rem; transition:all .3s; position:relative; overflow:hidden;
+    background: var(--card); 
+    border: 1px solid var(--border); 
+    border-radius: 24px;
+    padding: 1.75rem; 
+    transition: all .3s cubic-bezier(0.4, 0, 0.2, 1); 
+    position: relative; 
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
+  
   .subject-card::before {
-    content:''; position:absolute; top:0; right:0; width:3px; height:100%;
-    opacity:.6; transition:opacity .3s;
+    content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%;
+    opacity: 0.8; transition: opacity .3s;
   }
-  .subject-card:hover { border-color:var(--border2); transform:translateY(-2px); }
-  .subject-card:hover::before { opacity:1; }
-  .subject-card.urgent::before { animation:pulse-bar 1.5s infinite; }
-  .subject-card.finished::before { opacity:1; }
-  @keyframes pulse-bar { 0%,100%{opacity:.4} 50%{opacity:1} }
+  .subject-card:hover { 
+    border-color: var(--border2); 
+    transform: translateY(-5px); 
+    background: var(--card-hover);
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);
+  }
+  .subject-card:hover::before { opacity: 1; }
+  .subject-card.urgent { border-color: rgba(239, 68, 68, 0.3); }
+  .subject-card.urgent::before { animation: pulse-bar 1.5s infinite; }
+  
+  @keyframes pulse-bar { 0%,100% { opacity:0.5 } 50% { opacity:1 } }
 
-  .subject-card[data-idx="0"]::before { background:#a78bfa; }
-  .subject-card[data-idx="1"]::before { background:#60a5fa; }
-  .subject-card[data-idx="2"]::before { background:#34d399; }
-  .subject-card[data-idx="3"]::before { background:#fb923c; }
-  .subject-card[data-idx="4"]::before { background:#f472b6; }
-  .subject-card[data-idx="5"]::before { background:#fbbf24; }
+  /* ألوان مبهجة ومميزة لكل مادة */
+  .subject-card[data-idx="0"]::before { background: #818cf8; }
+  .subject-card[data-idx="1"]::before { background: #34d399; }
+  .subject-card[data-idx="2"]::before { background: #60a5fa; }
+  .subject-card[data-idx="3"]::before { background: #fb923c; }
+  .subject-card[data-idx="4"]::before { background: #f472b6; }
+  .subject-card[data-idx="5"]::before { background: #a78bfa; }
 
-  .subject-card[data-idx="0"] .subject-code { color:#a78bfa; background:rgba(167,139,250,0.1); }
-  .subject-card[data-idx="1"] .subject-code { color:#60a5fa; background:rgba(96,165,250,0.1); }
-  .subject-card[data-idx="2"] .subject-code { color:#34d399; background:rgba(52,211,153,0.1); }
-  .subject-card[data-idx="3"] .subject-code { color:#fb923c; background:rgba(251,146,60,0.1); }
-  .subject-card[data-idx="4"] .subject-code { color:#f472b6; background:rgba(244,114,182,0.1); }
-  .subject-card[data-idx="5"] .subject-code { color:#fbbf24; background:rgba(251,191,36,0.1); }
+  .subject-card[data-idx="0"] .subject-code { color: #818cf8; background: rgba(129, 140, 248, 0.1); }
+  .subject-card[data-idx="1"] .subject-code { color: #34d399; background: rgba(52, 211, 153, 0.1); }
+  .subject-card[data-idx="2"] .subject-code { color: #60a5fa; background: rgba(96, 165, 250, 0.1); }
+  .subject-card[data-idx="3"] .subject-code { color: #fb923c; background: rgba(251, 146, 60, 0.1); }
+  .subject-card[data-idx="4"] .subject-code { color: #f472b6; background: rgba(244, 114, 182, 0.1); }
+  .subject-card[data-idx="5"] .subject-code { color: #a78bfa; background: rgba(167, 139, 250, 0.1); }
 
+  .card-top { margin-bottom: 12px; }
+  
   .subject-code {
-    font-size:11px; font-weight:600; letter-spacing:1px;
-    padding:3px 8px; border-radius:6px;
-    display:inline-block; margin-bottom:10px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+    padding: 4px 10px; border-radius: 8px;
+    display: inline-block; margin-bottom: 12px;
   }
-  .subject-name { font-size:15px; font-weight:600; color:var(--text); margin-bottom:4px; line-height:1.4; }
+  
+  .subject-name { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 8px; line-height: 1.4; }
+  
   .subject-date {
-    font-size:12px; color:var(--text2); margin-bottom:1rem;
-    display:flex; align-items:center; gap:6px;
+    font-size: 13px; color: var(--text2); margin-bottom: 1.5rem;
+    display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
   }
-  .subject-date .dot { width:4px; height:4px; border-radius:50%; background:var(--text3); }
+  .subject-date .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text3); }
+  
   .optional-tag {
-    font-size:10px; font-weight:600; color:#fbbf24;
-    background:rgba(251,191,36,0.1); border-radius:5px;
-    padding:1px 6px; margin-right:2px;
+    font-size: 11px; font-weight: 600; color: #fbbf24;
+    background: rgba(251,191,36,0.1); border-radius: 6px;
+    padding: 2px 8px; margin-right: auto;
   }
 
-  .countdown-display { display:flex; gap:8px; }
+  .countdown-display { display: flex; gap: 8px; margin-top: auto; }
+  
   .time-block {
-    flex:1; background:var(--bg2); border-radius:10px; padding:8px 4px;
-    text-align:center; border:1px solid var(--border);
+    flex: 1; background: rgba(0, 0, 0, 0.15); border-radius: 14px; padding: 10px 4px;
+    text-align: center; border: 1px solid var(--border);
+    transition: background .3s;
   }
+  .light .time-block { background: rgba(0, 0, 0, 0.03); }
+  
   .time-num {
-    font-size:20px; font-weight:700; color:var(--text); line-height:1;
-    font-variant-numeric:tabular-nums; display:block; margin-bottom:2px;
+    font-size: 22px; font-weight: 700; color: var(--text); line-height: 1;
+    font-variant-numeric: tabular-nums; display: block; margin-bottom: 4px;
   }
-  .time-label { font-size:9px; color:var(--text3); letter-spacing:.5px; }
+  .time-label { font-size: 10px; color: var(--text3); font-weight: 500; }
 
-  .confetti-area { display:none; }
-  .subject-card.finished .countdown-display { display:none; }
-  .subject-card.finished .subject-date { display:none; }
-  .subject-card.finished .confetti-area { display:block; }
+  .confetti-area { display: none; }
+  .subject-card.finished .countdown-display { display: none; }
+  .subject-card.finished .subject-date { display: none; }
+  .subject-card.finished .confetti-area { display: block; width: 100%; margin-top: 10px; }
 
   .confetti-btn {
-    width:100%; background:rgba(52,211,153,0.08);
-    border:1px dashed rgba(52,211,153,0.4); border-radius:12px;
-    padding:18px; cursor:pointer; font-family:inherit;
-    display:flex; flex-direction:column; align-items:center; gap:5px;
-    transition:all .2s;
+    width: 100%; background: rgba(16, 185, 129, 0.08);
+    border: 1px dashed rgba(16, 185, 129, 0.4); border-radius: 14px;
+    padding: 16px; cursor: pointer; font-family: inherit;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    transition: all .2s;
   }
-  .confetti-btn:hover { background:rgba(52,211,153,0.15); transform:scale(1.02); border-color:rgba(52,211,153,0.7); }
-  .confetti-btn:active { transform:scale(0.97); }
-  .confetti-btn .cb-emoji { font-size:28px; }
-  .confetti-btn .cb-text { font-size:12px; color:var(--success); font-weight:600; }
+  .confetti-btn:hover { background: rgba(16, 185, 129, 0.15); transform: scale(1.02); border-color: rgba(16, 185, 129, 0.7); }
+  .confetti-btn .cb-emoji { font-size: 26px; }
+  .confetti-btn .cb-text { font-size: 13px; color: var(--success); font-weight: 600; }
 
-  /* sticky tawfeeq */
+  /* زر الدعاء التفاعلي السفلي */
   .sticky-tawfeeq {
-    position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
-    z-index:100; display:flex; flex-direction:column; align-items:center; gap:5px;
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 8px;
   }
   .tawfeeq-circle {
-    width:68px; height:68px; border-radius:50%;
-    background:var(--accent); border:none;
-    cursor:pointer; font-size:26px;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 4px 24px rgba(108,99,255,0.5);
-    transition:all .2s;
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); border: none;
+    cursor: pointer; font-size: 28px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4);
+    transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
-  .tawfeeq-circle:hover { transform:scale(1.1); box-shadow:0 6px 32px rgba(108,99,255,0.7); }
-  .tawfeeq-circle:active { transform:scale(0.94); }
-  .tawfeeq-circle.pressed { animation:pop .3s ease; }
-  @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.2)} 100%{transform:scale(1)} }
+  .tawfeeq-circle:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(79, 70, 229, 0.5); }
+  .tawfeeq-circle:active { transform: scale(0.95); }
+  .tawfeeq-circle.pressed { animation: pop .3s ease; }
+  @keyframes pop { 0% {transform:scale(1)} 50% {transform:scale(1.15)} 100% {transform:scale(1)} }
+  
   .tawfeeq-badge {
-    background:var(--card); border:1px solid var(--border2);
-    border-radius:20px; padding:3px 12px;
-    font-size:12px; font-weight:600; color:var(--accent2);
-    font-variant-numeric:tabular-nums;
-    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+    background: var(--card); border: 1px solid var(--border2);
+    border-radius: 50px; padding: 4px 16px;
+    font-size: 13px; font-weight: 600; color: var(--text);
+    font-variant-numeric: tabular-nums;
+    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(5px);
   }
 
-  #confetti-canvas { position:fixed; inset:0; pointer-events:none; z-index:1000; }
+  #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1000; }
 
   .holiday-overlay {
-    position:fixed; inset:0; z-index:997;
-    background:transparent;
-    display:none; flex-direction:column;
-    align-items:center; justify-content:center;
-    text-align:center; padding:2rem;
-    pointer-events:none;
+    position: fixed; inset: 0; z-index: 997;
+    background: rgba(9, 13, 22, 0.8);
+    backdrop-filter: blur(20px);
+    display: none; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 2rem;
   }
-  .holiday-overlay.show { display:flex; }
+  .holiday-overlay.show { display: flex; }
   .holiday-text {
-    font-size:clamp(2.5rem, 10vw, 6rem);
-    font-weight:700; color:var(--text);
-    line-height:1.2; margin-bottom:1rem;
-    animation:float 3s ease-in-out infinite;
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 700; color: #34d399;
+    line-height: 1.2; margin-bottom: 1rem;
+    animation: float 3s ease-in-out infinite;
+    text-shadow: 0 0 40px rgba(52, 211, 153, 0.3);
   }
 
-  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+  @keyframes float { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-15px) } }
 
-  /* toast */
   .toast {
-    position:fixed; bottom:110px; left:50%;
-    transform:translateX(-50%) translateY(20px);
-    background:var(--card); border:1px solid var(--border2); border-radius:50px;
-    padding:10px 22px; font-size:13px; color:var(--text); z-index:1001;
-    opacity:0; transition:opacity .25s ease, transform .25s ease;
-    white-space:nowrap; box-shadow:0 8px 32px rgba(0,0,0,0.25);
-    pointer-events:none;
+    position: fixed; bottom: 120px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--card); border: 1px solid var(--border2); border-radius: 50px;
+    padding: 12px 24px; font-size: 14px; color: var(--text); z-index: 1001;
+    opacity: 0; transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    pointer-events: none; backdrop-filter: blur(10px);
   }
-  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  @media(max-width:500px) {
-    .subjects-grid { grid-template-columns:1fr; }
-    .logo { font-size:1.3rem; }
+  @media(max-width:600px) {
+    .subjects-grid { grid-template-columns: 1fr; gap: 16px; }
+    .logo { font-size: 1.5rem; }
+    .container { padding: 1.5rem 1rem; }
   }
 </style>
 </head>
 <body>
 <canvas id="confetti-canvas"></canvas>
 <div class="holiday-overlay" id="holiday-overlay">
-  <div class="holiday-text">إجازة سعيدة 🎊</div>
+  <div class="holiday-text">إجازة سعيدة والوعد الـ A+ 🎊</div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -206,7 +273,6 @@
 </div>
 
 <script>
-// تم ترتيب المصفوفة تصاعدياً من الأقرب للأبعد ميلادياً وحذف حقل الهجري
 const SUBJECTS = [
   { code:'COE 351', name:'شبكات الحاسب',                   dateISO:'2026-06-04', time:'10:30', ampm:'ص', day:'الخميس' },
   { code:'MATH 319',name:'علم البيانات',                  dateISO:'2026-06-07', time:'10:30', ampm:'م', day:'الأحد', optional:true },
@@ -243,14 +309,15 @@ function renderSubjects() {
     const diff = examDate - Date.now();
     const urgent = !finished && diff > 0 && diff < 86400000 * 2;
 
-    // تم حذف تاريخ الهجري من واجهة الـ HTML هنا واستبداله بالتاريخ الميلادي ISO
     return `<div class="subject-card${finished?' finished':''}${urgent?' urgent':''}" data-idx="${i}" id="card-${i}">
-      <span class="subject-code">${s.code}</span>
-      <div class="subject-name">${s.name}</div>
-      <div class="subject-date">
-        <span>${s.day}</span><span class="dot"></span><span>${s.dateISO}</span><span class="dot"></span>
-        <span>الساعة ${to12hr(s.time, s.ampm)}</span>
-        ${s.optional ? '<span class="optional-tag">اختيارية</span>' : ''}
+      <div class="card-top">
+        <span class="subject-code">${s.code}</span>
+        <div class="subject-name">${s.name}</div>
+        <div class="subject-date">
+          <span>${s.day}</span><span class="dot"></span><span>${s.dateISO}</span><span class="dot"></span>
+          <span>الساعة ${to12hr(s.time, s.ampm)}</span>
+          ${s.optional ? '<span class="optional-tag">اختيارية</span>' : ''}
+        </div>
       </div>
       <div class="countdown-display">
         <div class="time-block"><span class="time-num" id="d-${i}">—</span><span class="time-label">يوم</span></div>
@@ -310,11 +377,11 @@ async function pressTawfeeq() {
   const el  = document.getElementById('count-tawfeeq');
   btn.classList.add('pressed');
   setTimeout(() => btn.classList.remove('pressed'), 300);
-  showToast('الله يوفق الجميع');
+  showToast('الله يوفق الجميع 🤍');
   try {
     const r = await fetch(`${API_BASE}/hit/${NS}/tawfeeq`);
     const d = await r.json();
-    if (d.value != null) el.textContent = d.value.toLocaleString('ar-SA');
+    if (d.value != null) el.textContent = d.value.toLocaleString('ar-SA') + " دعوة بالتوفيق";
   } catch {}
 }
 
@@ -322,7 +389,7 @@ async function loadCount() {
   try {
     const r = await fetch(`${API_BASE}/get/${NS}/tawfeeq`);
     const d = await r.json();
-    if (d.value != null) document.getElementById('count-tawfeeq').textContent = d.value.toLocaleString('ar-SA');
+    if (d.value != null) document.getElementById('count-tawfeeq').textContent = d.value.toLocaleString('ar-SA') + " دعوة بالتوفيق";
   } catch {}
 }
 
@@ -339,7 +406,7 @@ function showToast(msg) {
   el.textContent = msg;
   el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 1000);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
 }
 
 function launchConfetti() {
@@ -347,7 +414,7 @@ function launchConfetti() {
   const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  const colors = ['#a78bfa','#60a5fa','#34d399','#fb923c','#f472b6','#fbbf24'];
+  const colors = ['#818cf8','#34d399','#60a5fa','#fb923c','#f472b6','#a78bfa'];
   const pieces = Array.from({length:180}, () => ({
     x: Math.random() * canvas.width,
     y: -10 - Math.random() * 120,
@@ -388,7 +455,7 @@ function launchInfiniteConfetti() {
   const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  const colors = ['#a78bfa','#60a5fa','#34d399','#fb923c','#f472b6','#fbbf24'];
+  const colors = ['#818cf8','#34d399','#60a5fa','#fb923c','#f472b6','#a78bfa'];
   let pieces = [];
   function addPieces() {
     for (let i = 0; i < 8; i++) {
