@@ -206,16 +206,16 @@
 </div>
 
 <script>
+// تم ترتيب المصفوفة تصاعدياً من الأقرب للأبعد ميلادياً وحذف حقل الهجري
 const SUBJECTS = [
-  { code:'COE 351', name:'شبكات الحاسب',                  dateHijri:'18-12-1447', dateISO:'2026-06-04', time:'10:30', ampm:'ص', day:'الخميس' },
-  { code:'IT 372',  name:'تنقيب وتخزين البيانات',          dateHijri:'23-12-1447', dateISO:'2026-06-09', time:'08:00', ampm:'ص', day:'الثلاثاء' },
-  { code:'MATH 319',name:'علم البيانات',         dateHijri:'21-12-1447', dateISO:'2026-06-7', time:'13:00', ampm:'م', day:'الأربعاء', optional:true },
-  { code:'IT 315',  name:'البرمجة الشيئية',                dateHijri:'25-12-1447', dateISO:'2026-06-11', time:'13:00', ampm:'م', day:'الخميس' },
-  { code:'IT 342',  name:'الحوسبة السحابية والمتنقلة',     dateHijri:'28-12-1447', dateISO:'2026-06-14', time:'13:00', ampm:'م', day:'الأحد' },
-  { code:'IT 362',  name:'مهارات اتصال وأخلاقيات المهنة',  dateHijri:'1-1-1448',   dateISO:'2026-06-16', time:'10:30', ampm:'ص', day:'الثلاثاء' },
+  { code:'COE 351', name:'شبكات الحاسب',                   dateISO:'2026-06-04', time:'10:30', ampm:'ص', day:'الخميس' },
+  { code:'MATH 319',name:'علم البيانات',                  dateISO:'2026-06-07', time:'13:00', ampm:'م', day:'الأحد', optional:true },
+  { code:'IT 372',  name:'تنقيب وتخزين البيانات',          dateISO:'2026-06-09', time:'08:00', ampm:'ص', day:'الثلاثاء' },
+  { code:'IT 315',  name:'البرمجة الشيئية',                dateISO:'2026-06-11', time:'13:00', ampm:'م', day:'الخميس' },
+  { code:'IT 342',  name:'الحوسبة السحابية والمتنقلة',     dateISO:'2026-06-14', time:'13:00', ampm:'م', day:'الأحد' },
+  { code:'IT 362',  name:'مهارات اتصال وأخلاقيات المهنة',  dateISO:'2026-06-16', time:'10:30', ampm:'ص', day:'الثلاثاء' },
 ];
 
-// Abacus API - بديل CountAPI يشتغل بدون تسجيل
 const API_BASE = 'https://abacus.jasoncameron.dev';
 const NS = 'aadat-alIT-1447';
 const ONE_HOUR = 3600000;
@@ -243,11 +243,12 @@ function renderSubjects() {
     const diff = examDate - Date.now();
     const urgent = !finished && diff > 0 && diff < 86400000 * 2;
 
+    // تم حذف تاريخ الهجري من واجهة الـ HTML هنا واستبداله بالتاريخ الميلادي ISO
     return `<div class="subject-card${finished?' finished':''}${urgent?' urgent':''}" data-idx="${i}" id="card-${i}">
       <span class="subject-code">${s.code}</span>
       <div class="subject-name">${s.name}</div>
       <div class="subject-date">
-        <span>${s.day}</span><span class="dot"></span><span>${s.dateHijri}</span><span class="dot"></span>
+        <span>${s.day}</span><span class="dot"></span><span>${s.dateISO}</span><span class="dot"></span>
         <span>الساعة ${to12hr(s.time, s.ampm)}</span>
         ${s.optional ? '<span class="optional-tag">اختيارية</span>' : ''}
       </div>
@@ -296,7 +297,6 @@ function updateCountdowns() {
     card.classList.toggle('urgent', diff < 86400000 * 2);
   });
 
-  // لو كل الاختبارات انتهت
   const allDone = SUBJECTS.every((s) => examFinished(s));
   const overlay = document.getElementById('holiday-overlay');
   if (allDone && !overlay.classList.contains('show')) {
@@ -333,7 +333,6 @@ function toggleTheme() {
   document.getElementById('theme-btn').textContent = isLight ? '☀️' : '🌙';
 }
 
-// toast مصلح
 let toastTimer;
 function showToast(msg) {
   const el = document.getElementById('toast');
@@ -383,7 +382,6 @@ function launchConfetti() {
   cancelAnimationFrame(frame);
   draw();
 }
-
 
 function launchInfiniteConfetti() {
   const canvas = document.getElementById('confetti-canvas');
