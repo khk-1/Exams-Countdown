@@ -93,4 +93,72 @@
         const exams = [
             { name: "Theory Networks", date: "2026-06-04T08:00:00", display: "4 / 6" },
             { name: "IOT", date: "2026-06-07T08:00:00", display: "7 / 6" },
-            { name: "Tanqeeb", date: "2026-06-09T08:00:00", display: "9 /
+            { name: "Tanqeeb", date: "2026-06-09T08:00:00", display: "9 / 6" },
+            { name: "Theory Programming", date: "2026-06-11T08:00:00", display: "11 / 6" },
+            { name: "Cloud Computing", date: "2026-06-14T08:00:00", display: "14 / 6" },
+            { name: "Ethics", date: "2026-06-16T08:00:00", display: "16 / 6" }
+        ];
+
+        function createCards(data, containerId, cardClass) {
+            const container = document.getElementById(containerId);
+            if (!container || !data || data.length === 0) {
+                if (container) container.innerHTML = `<p style="color: #64748b; grid-column: 1/-1;">لا يوجد مهام حالياً الحلّية حلوة! ✨</p>`;
+                return;
+            }
+            
+            data.forEach((item, index) => {
+                const id = `${containerId}-${index}`;
+                container.innerHTML += `
+                    <div class="card ${cardClass}">
+                        <div class="subject-name">${item.name}</div>
+                        <div class="date-display">موعدنا: ${item.display}</div>
+                        <div class="timer" id="${id}">جاري الحساب...</div>
+                    </div>
+                `;
+                startTimer(item.date, id);
+            });
+        }
+
+        function startTimer(targetDate, elementId) {
+            const countDownDate = new Date(targetDate).getTime();
+            
+            // Run instantly once before the interval starts so there's no delay
+            updateTimer(); 
+
+            const x = setInterval(updateTimer, 1000);
+
+            function updateTimer() {
+                const now = new Date().getTime();
+                const distance = countDownDate - now;
+                const timerElement = document.getElementById(elementId);
+
+                if (!timerElement) {
+                    clearInterval(x);
+                    return;
+                }
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    timerElement.innerHTML = "تم التسليم / بدأ الاختبار ✅";
+                    return;
+                }
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                timerElement.innerHTML = `
+                    <div>${days}<span class="time-unit">يوم</span></div>
+                    <div>${hours}<span class="time-unit">ساعة</span></div>
+                    <div>${minutes}<span class="time-unit">دقيقة</span></div>
+                    <div>${seconds}<span class="time-unit">ثانية</span></div>
+                `;
+            }
+        }
+
+        // تشغيل البطاقات بأمان
+        createCards(tasks, 'taskList', 'task-card');
+        createCards(exams, 'examList', 'exam-card');
+    </script>
+</body>
+</html>
