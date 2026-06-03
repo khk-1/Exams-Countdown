@@ -3,41 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>عداد الايتي | لوحة المتابعة الحديثة</title>
+<title>عداد الايتي | واجهة الزجاج السائل</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #090d16; 
-    --bg-gradient: radial-gradient(circle at 50% 0%, #141f36 0%, #090d16 100%);
-    --card: rgba(22, 32, 54, 0.7); 
-    --card-hover: rgba(30, 45, 77, 0.9);
-    --border: rgba(255, 255, 255, 0.05); 
-    --border2: rgba(255, 255, 255, 0.12);
-    --accent: #4f46e5; 
-    --accent2: #818cf8;
+    --bg: #070b12; 
+    --bg-gradient: linear-gradient(135deg, #070b12 0%, #101726 100%);
+    --card: rgba(15, 23, 42, 0.45); 
+    --card-hover: rgba(20, 30, 54, 0.6);
+    --border: rgba(255, 255, 255, 0.08); 
+    --border2: rgba(255, 255, 255, 0.18);
+    --accent: #6366f1; 
+    --accent2: #a5b4fc;
     --text: #f8fafc; 
-    --text2: #94a3b8; 
-    --text3: #64748b;
-    --success: #10b981; 
-    --danger: #ef4444;
-    --card-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+    --text2: #cbd5e1; 
+    --text3: #94a3b8;
+    --success: #34d399; 
+    --danger: #f87171;
+    --glass-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    --orb-1: #1e1b4b;
+    --orb-2: #031525;
   }
   
   .light {
-    --bg: #f8fafc; 
-    --bg-gradient: radial-gradient(circle at 50% 0%, #eff6ff 0%, #f8fafc 100%);
-    --card: rgba(255, 255, 255, 0.85); 
-    --card-hover: rgba(255, 255, 255, 1);
-    --border: rgba(0, 0, 0, 0.04); 
-    --border2: rgba(0, 0, 0, 0.08);
+    --bg: #f1f5f9; 
+    --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    --card: rgba(255, 255, 255, 0.4); 
+    --card-hover: rgba(255, 255, 255, 0.65);
+    --border: rgba(255, 255, 255, 0.5); 
+    --border2: rgba(79, 70, 229, 0.2);
     --accent: #4f46e5; 
     --accent2: #4f46e5;
     --text: #0f172a; 
-    --text2: #475569; 
-    --text3: #94a3b8;
+    --text2: #334155; 
+    --text3: #64748b;
     --success: #059669; 
     --danger: #dc2626;
-    --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
+    --glass-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+    --orb-1: #e0e7ff;
+    --orb-2: #dbeafe;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -48,76 +52,111 @@
     background-image: var(--bg-gradient);
     color: var(--text);
     min-height: 100vh; 
-    transition: background .3s, color .3s; 
+    transition: background .4s, color .4s; 
     overflow-x: hidden;
-    padding-bottom: 120px;
+    padding-bottom: 130px;
+    position: relative;
   }
 
-  .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; position: relative; z-index: 1; }
+  /* كرات الخلفية السائلة المتحركة (Liquid Background Orbs) */
+  body::before, body::after {
+    content: ''; position: fixed; width: 50vw; height: 50vw; border-radius: 50%;
+    filter: blur(100px); z-index: 0; opacity: 0.6; pointer-events: none;
+    transition: background 0.5s;
+  }
+  body::before {
+    background: var(--orb-1); top: -10%; left: -10%;
+    animation: liquidFloat 12s ease-in-out infinite alternate;
+  }
+  body::after {
+    background: var(--orb-2); bottom: -10%; right: -10%;
+    animation: liquidFloat 16s ease-in-out infinite alternate-reverse;
+  }
+
+  @keyframes liquidFloat {
+    0% { transform: translateY(0) scale(1) rotate(0deg); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+    100% { transform: translateY(30px) scale(1.1) rotate(60deg); border-radius: 60% 40% 30% 70% / 50% 60% 40% 60%; }
+  }
+
+  .container { max-width: 1050px; margin: 0 auto; padding: 2.5rem 1.5rem; position: relative; z-index: 1; }
 
   header { 
     display: flex; 
     align-items: center; 
     justify-content: space-between; 
     margin-bottom: 3.5rem; 
-    border-bottom: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border);
     padding-bottom: 1.5rem;
+    backdrop-filter: blur(5px);
   }
   
-  .logo { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.5px; }
-  .logo span { color: var(--accent2); position: relative; }
-  .logo span::after {
-    content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 3px;
-    background: var(--accent2); border-radius: 2px;
+  .logo { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.5px; }
+  .logo span { 
+    background: linear-gradient(120deg, var(--accent2), #38bdf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   
   .theme-btn {
-    background: var(--card); border: 1px solid var(--border2); border-radius: 14px;
-    padding: 10px 14px; font-size: 18px; cursor: pointer; transition: all .3s ease;
-    box-shadow: var(--card-shadow);
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 12px 16px; font-size: 18px; cursor: pointer; transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--glass-shadow); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   }
-  .theme-btn:hover { border-color: var(--accent2); transform: scale(1.05); }
+  .theme-btn:hover { border-color: var(--border2); transform: scale(1.08) rotate(8deg); }
 
   .subjects-grid {
     display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 24px; 
     margin-bottom: 2rem;
   }
 
+  /* بطاقات الزجاج السائل المترابطة */
   .subject-card {
     background: var(--card); 
     border: 1px solid var(--border); 
-    border-radius: 24px;
-    padding: 1.75rem; 
-    transition: all .3s cubic-bezier(0.4, 0, 0.2, 1); 
+    border-radius: 28px;
+    padding: 2rem; 
+    transition: all .4s cubic-bezier(0.16, 1, 0.3, 1); 
     position: relative; 
     overflow: hidden;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    box-shadow: var(--glass-shadow);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
   
-  .subject-card::before {
-    content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%;
-    opacity: 0.8; transition: opacity .3s;
+  /* لمعان زجاجي علوي ناعم */
+  .subject-card::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+    background: linear-gradient(rgba(255,255,255,0.05), transparent);
+    pointer-events: none;
   }
+  .light .subject-card::after {
+    background: linear-gradient(rgba(255,255,255,0.4), transparent);
+  }
+
   .subject-card:hover { 
     border-color: var(--border2); 
-    transform: translateY(-5px); 
+    transform: translateY(-6px) scale(1.02); 
     background: var(--card-hover);
-    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);
+    box-shadow: 0 30px 60px -15px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255, 255, 255, 0.2);
   }
-  .subject-card:hover::before { opacity: 1; }
-  .subject-card.urgent { border-color: rgba(239, 68, 68, 0.3); }
-  .subject-card.urgent::before { animation: pulse-bar 1.5s infinite; }
   
-  @keyframes pulse-bar { 0%,100% { opacity:0.5 } 50% { opacity:1 } }
+  /* مؤشر الحالة الجانبي المتوهج */
+  .subject-card::before {
+    content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%;
+    opacity: 0.7; transition: opacity .3s, width 0.3s; z-index: 2;
+  }
+  .subject-card:hover::before { opacity: 1; width: 8px; }
+  .subject-card.urgent { border-color: rgba(248, 113, 113, 0.4); }
+  .subject-card.urgent::before { animation: pulse-glow 2s infinite alternate; }
+  
+  @keyframes pulse-glow { 0% { opacity:0.4; filter: drop-shadow(0 0 2px rgba(248,113,113,0.5)); } 100% { opacity:1; filter: drop-shadow(0 0 8px rgba(248,113,113,0.9)); } }
 
-  /* ألوان مبهجة ومميزة لكل مادة */
+  /* تخصيص تدرجات ألوان ذائبة لكل مادة */
   .subject-card[data-idx="0"]::before { background: #818cf8; }
   .subject-card[data-idx="1"]::before { background: #34d399; }
   .subject-card[data-idx="2"]::before { background: #60a5fa; }
@@ -125,129 +164,137 @@
   .subject-card[data-idx="4"]::before { background: #f472b6; }
   .subject-card[data-idx="5"]::before { background: #a78bfa; }
 
-  .subject-card[data-idx="0"] .subject-code { color: #818cf8; background: rgba(129, 140, 248, 0.1); }
-  .subject-card[data-idx="1"] .subject-code { color: #34d399; background: rgba(52, 211, 153, 0.1); }
-  .subject-card[data-idx="2"] .subject-code { color: #60a5fa; background: rgba(96, 165, 250, 0.1); }
-  .subject-card[data-idx="3"] .subject-code { color: #fb923c; background: rgba(251, 146, 60, 0.1); }
-  .subject-card[data-idx="4"] .subject-code { color: #f472b6; background: rgba(244, 114, 182, 0.1); }
-  .subject-card[data-idx="5"] .subject-code { color: #a78bfa; background: rgba(167, 139, 250, 0.1); }
+  .subject-card[data-idx="0"] .subject-code { color: #818cf8; background: rgba(129, 140, 248, 0.12); }
+  .subject-card[data-idx="1"] .subject-code { color: #34d399; background: rgba(52, 211, 153, 0.12); }
+  .subject-card[data-idx="2"] .subject-code { color: #60a5fa; background: rgba(96, 165, 250, 0.12); }
+  .subject-card[data-idx="3"] .subject-code { color: #fb923c; background: rgba(251, 146, 60, 0.12); }
+  .subject-card[data-idx="4"] .subject-code { color: #f472b6; background: rgba(244, 114, 182, 0.12); }
+  .subject-card[data-idx="5"] .subject-code { color: #a78bfa; background: rgba(167, 139, 250, 0.12); }
 
-  .card-top { margin-bottom: 12px; }
+  .card-top { margin-bottom: 16px; position: relative; z-index: 3; }
   
   .subject-code {
-    font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
-    padding: 4px 10px; border-radius: 8px;
-    display: inline-block; margin-bottom: 12px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+    padding: 6px 12px; border-radius: 10px;
+    display: inline-block; margin-bottom: 14px;
+    border: 1px solid rgba(255,255,255,0.03);
   }
   
-  .subject-name { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 8px; line-height: 1.4; }
+  .subject-name { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 10px; line-height: 1.4; }
   
   .subject-date {
-    font-size: 13px; color: var(--text2); margin-bottom: 1.5rem;
-    display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+    font-size: 13px; color: var(--text2); margin-bottom: 1rem;
+    display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
   }
-  .subject-date .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text3); }
+  .subject-date .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text3); opacity: 0.6; }
   
   .optional-tag {
     font-size: 11px; font-weight: 600; color: #fbbf24;
-    background: rgba(251,191,36,0.1); border-radius: 6px;
-    padding: 2px 8px; margin-right: auto;
+    background: rgba(251,191,36,0.15); border-radius: 8px;
+    padding: 3px 10px; margin-right: auto;
+    border: 1px solid rgba(251,191,36,0.2);
   }
 
-  .countdown-display { display: flex; gap: 8px; margin-top: auto; }
+  /* شاشات العدادات الشفافة */
+  .countdown-display { display: flex; gap: 10px; margin-top: auto; position: relative; z-index: 3; }
   
   .time-block {
-    flex: 1; background: rgba(0, 0, 0, 0.15); border-radius: 14px; padding: 10px 4px;
-    text-align: center; border: 1px solid var(--border);
-    transition: background .3s;
+    flex: 1; background: rgba(255, 255, 255, 0.04); border-radius: 18px; padding: 12px 4px;
+    text-align: center; border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
+    transition: all 0.3s;
   }
-  .light .time-block { background: rgba(0, 0, 0, 0.03); }
+  .light .time-block { background: rgba(0, 0, 0, 0.04); border-color: rgba(0,0,0,0.02); }
+  .subject-card:hover .time-block { background: rgba(255, 255, 255, 0.08); transform: scale(1.02); }
+  .light .subject-card:hover .time-block { background: rgba(0, 0, 0, 0.07); }
   
   .time-num {
-    font-size: 22px; font-weight: 700; color: var(--text); line-height: 1;
+    font-size: 24px; font-weight: 700; color: var(--text); line-height: 1;
     font-variant-numeric: tabular-nums; display: block; margin-bottom: 4px;
   }
-  .time-label { font-size: 10px; color: var(--text3); font-weight: 500; }
+  .time-label { font-size: 10px; color: var(--text3); font-weight: 600; }
 
-  .confetti-area { display: none; }
+  .confetti-area { display: none; position: relative; z-index: 4; }
   .subject-card.finished .countdown-display { display: none; }
   .subject-card.finished .subject-date { display: none; }
   .subject-card.finished .confetti-area { display: block; width: 100%; margin-top: 10px; }
 
   .confetti-btn {
-    width: 100%; background: rgba(16, 185, 129, 0.08);
-    border: 1px dashed rgba(16, 185, 129, 0.4); border-radius: 14px;
-    padding: 16px; cursor: pointer; font-family: inherit;
+    width: 100%; background: rgba(52, 211, 153, 0.1);
+    border: 1px dashed rgba(52, 211, 153, 0.5); border-radius: 18px;
+    padding: 18px; cursor: pointer; font-family: inherit;
     display: flex; flex-direction: column; align-items: center; gap: 6px;
-    transition: all .2s;
+    transition: all .3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  .confetti-btn:hover { background: rgba(16, 185, 129, 0.15); transform: scale(1.02); border-color: rgba(16, 185, 129, 0.7); }
-  .confetti-btn .cb-emoji { font-size: 26px; }
-  .confetti-btn .cb-text { font-size: 13px; color: var(--success); font-weight: 600; }
+  .confetti-btn:hover { background: rgba(52, 211, 153, 0.2); transform: scale(1.03); border-color: #34d399; }
+  .confetti-btn .cb-emoji { font-size: 28px; }
+  .confetti-btn .cb-text { font-size: 13px; color: var(--success); font-weight: 700; }
 
-  /* زر الدعاء التفاعلي السفلي */
+  /* الكبسولة العائمة الذائبة للدعاء بالتوفيق */
   .sticky-tawfeeq {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+    z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 10px;
   }
   .tawfeeq-circle {
-    width: 72px; height: 72px; border-radius: 50%;
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); border: none;
-    cursor: pointer; font-size: 28px;
+    width: 76px; height: 76px; border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%); border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer; font-size: 32px;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4);
-    transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 20px 40px rgba(79, 70, 229, 0.4), inset 0 1px 2px rgba(255,255,255,0.3);
+    transition: all .4s cubic-bezier(0.175, 0.885, 0.32, 1.4);
   }
-  .tawfeeq-circle:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(79, 70, 229, 0.5); }
-  .tawfeeq-circle:active { transform: scale(0.95); }
-  .tawfeeq-circle.pressed { animation: pop .3s ease; }
-  @keyframes pop { 0% {transform:scale(1)} 50% {transform:scale(1.15)} 100% {transform:scale(1)} }
+  .tawfeeq-circle:hover { transform: translateY(-8px) scale(1.08); box-shadow: 0 25px 50px rgba(6, 182, 212, 0.5); }
+  .tawfeeq-circle:active { transform: scale(0.92); }
   
   .tawfeeq-badge {
-    background: var(--card); border: 1px solid var(--border2);
-    border-radius: 50px; padding: 4px 16px;
-    font-size: 13px; font-weight: 600; color: var(--text);
+    background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border2);
+    border-radius: 50px; padding: 6px 20px;
+    font-size: 13px; font-weight: 700; color: #ffffff;
     font-variant-numeric: tabular-nums;
-    box-shadow: var(--card-shadow);
-    backdrop-filter: blur(5px);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   }
+  .light .tawfeeq-badge { background: rgba(255, 255, 255, 0.7); color: var(--text); }
 
   #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1000; }
 
   .holiday-overlay {
     position: fixed; inset: 0; z-index: 997;
-    background: rgba(9, 13, 22, 0.8);
-    backdrop-filter: blur(20px);
+    background: rgba(7, 11, 18, 0.7);
+    backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
     display: none; flex-direction: column;
     align-items: center; justify-content: center;
     text-align: center; padding: 2rem;
   }
   .holiday-overlay.show { display: flex; }
   .holiday-text {
-    font-size: clamp(3rem, 8vw, 5rem);
-    font-weight: 700; color: #34d399;
+    font-size: clamp(3.5rem, 9vw, 6rem);
+    font-weight: 700;
+    background: linear-gradient(120deg, #34d399, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     line-height: 1.2; margin-bottom: 1rem;
-    animation: float 3s ease-in-out infinite;
-    text-shadow: 0 0 40px rgba(52, 211, 153, 0.3);
+    animation: floatLiquid 4s ease-in-out infinite alternate;
   }
 
-  @keyframes float { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-15px) } }
+  @keyframes floatLiquid { 0% { transform:translateY(0) scale(1) } 100% { transform:translateY(-20px) scale(1.03) } }
 
   .toast {
-    position: fixed; bottom: 120px; left: 50%;
-    transform: translateX(-50%) translateY(20px);
+    position: fixed; bottom: 130px; left: 50%;
+    transform: translateX(-50%) translateY(25px);
     background: var(--card); border: 1px solid var(--border2); border-radius: 50px;
-    padding: 12px 24px; font-size: 14px; color: var(--text); z-index: 1001;
-    opacity: 0; transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
-    white-space: nowrap; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    pointer-events: none; backdrop-filter: blur(10px);
+    padding: 14px 28px; font-size: 14px; font-weight: 600; color: var(--text); z-index: 1001;
+    opacity: 0; transition: all .4s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap; box-shadow: var(--glass-shadow);
+    pointer-events: none; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   @media(max-width:600px) {
-    .subjects-grid { grid-template-columns: 1fr; gap: 16px; }
-    .logo { font-size: 1.5rem; }
-    .container { padding: 1.5rem 1rem; }
+    .subjects-grid { grid-template-columns: 1fr; gap: 20px; }
+    .logo { font-size: 1.6rem; }
+    .container { padding: 2rem 1rem; }
+    body::before, body::after { width: 80vw; height: 80vw; }
   }
 </style>
 </head>
