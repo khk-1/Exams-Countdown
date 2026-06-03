@@ -1,164 +1,434 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متابعة المهام والاختبارات</title>
-    <style>
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 { color: #38bdf8; margin-bottom: 5px; }
-        #current-date { color: #94a3b8; font-size: 1.2rem; margin-bottom: 20px; }
-        .section-title {
-            width: 100%;
-            max-width: 1100px;
-            margin: 40px 0 20px 0;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #334155;
-            color: #38bdf8;
-            font-size: 1.8rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .assignments-title { color: #a78bfa; border-color: #4c1d95; }
-        
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 1100px;
-        }
-        .card {
-            background: #1e293b;
-            padding: 20px;
-            border-radius: 16px;
-            border: 1px solid #334155;
-            text-align: center;
-            position: relative;
-            transition: 0.3s;
-        }
-        .card:hover { transform: translateY(-5px); }
-        .exam-card { border-left: 5px solid #38bdf8; }
-        .task-card { border-left: 5px solid #a78bfa; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عداد الايتي</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0a0f; --bg2:#111118; --card:#16161f;
+    --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
+    --accent:#6c63ff; --accent2:#a78bfa;
+    --text:#f0f0ff; --text2:#9090b0; --text3:#5a5a7a;
+    --success:#34d399; --danger:#f87171;
+  }
+  .light {
+    --bg:#f5f5fa; --bg2:#eaeaf2; --card:#ffffff;
+    --border:rgba(0,0,0,0.07); --border2:rgba(0,0,0,0.13);
+    --accent:#6c63ff; --accent2:#7c3aed;
+    --text:#1a1a2e; --text2:#555575; --text3:#9090b0;
+    --success:#059669; --danger:#dc2626;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'IBM Plex Sans Arabic',sans-serif;
+    background:var(--bg); color:var(--text);
+    min-height:100vh; transition:background .3s,color .3s; overflow-x:hidden;
+    padding-bottom:110px;
+  }
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+    background-size:40px 40px;
+  }
+  .container { max-width:900px; margin:0 auto; padding:2rem 1.5rem; position:relative; z-index:1; }
 
-        .subject-name { font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; }
-        .date-display { font-size: 1rem; color: #94a3b8; margin-bottom: 15px; font-weight: bold; }
-        
-        .timer {
-            background: #0f172a;
-            padding: 12px;
-            border-radius: 12px;
-            font-family: 'Courier New', monospace;
-            font-size: 1.1rem;
-            color: #fbbf24;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-around;
-        }
-        .time-unit { font-size: 0.65rem; color: #64748b; display: block; text-transform: uppercase; }
-    </style>
+  header { display:flex; align-items:center; justify-content:space-between; margin-bottom:3rem; }
+  .logo { font-size:1.6rem; font-weight:700; }
+  .logo span { color:var(--accent2); }
+  .theme-btn {
+    background:var(--card); border:1px solid var(--border2); border-radius:50px;
+    padding:8px 12px; font-size:18px; cursor:pointer; transition:all .2s; line-height:1;
+  }
+  .theme-btn:hover { border-color:var(--accent); }
+
+  .subjects-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:16px; margin-bottom:2rem;
+  }
+
+  .subject-card {
+    background:var(--card); border:1px solid var(--border); border-radius:16px;
+    padding:1.25rem 1.5rem; transition:all .3s; position:relative; overflow:hidden;
+  }
+  .subject-card::before {
+    content:''; position:absolute; top:0; right:0; width:3px; height:100%;
+    opacity:.6; transition:opacity .3s;
+  }
+  .subject-card:hover { border-color:var(--border2); transform:translateY(-2px); }
+  .subject-card:hover::before { opacity:1; }
+  .subject-card.urgent::before { animation:pulse-bar 1.5s infinite; }
+  .subject-card.finished::before { opacity:1; }
+  @keyframes pulse-bar { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+  .subject-card[data-idx="0"]::before { background:#a78bfa; }
+  .subject-card[data-idx="1"]::before { background:#60a5fa; }
+  .subject-card[data-idx="2"]::before { background:#34d399; }
+  .subject-card[data-idx="3"]::before { background:#fb923c; }
+  .subject-card[data-idx="4"]::before { background:#f472b6; }
+  .subject-card[data-idx="5"]::before { background:#fbbf24; }
+
+  .subject-card[data-idx="0"] .subject-code { color:#a78bfa; background:rgba(167,139,250,0.1); }
+  .subject-card[data-idx="1"] .subject-code { color:#60a5fa; background:rgba(96,165,250,0.1); }
+  .subject-card[data-idx="2"] .subject-code { color:#34d399; background:rgba(52,211,153,0.1); }
+  .subject-card[data-idx="3"] .subject-code { color:#fb923c; background:rgba(251,146,60,0.1); }
+  .subject-card[data-idx="4"] .subject-code { color:#f472b6; background:rgba(244,114,182,0.1); }
+  .subject-card[data-idx="5"] .subject-code { color:#fbbf24; background:rgba(251,191,36,0.1); }
+
+  .subject-code {
+    font-size:11px; font-weight:600; letter-spacing:1px;
+    padding:3px 8px; border-radius:6px;
+    display:inline-block; margin-bottom:10px;
+  }
+  .subject-name { font-size:15px; font-weight:600; color:var(--text); margin-bottom:4px; line-height:1.4; }
+  .subject-date {
+    font-size:12px; color:var(--text2); margin-bottom:1rem;
+    display:flex; align-items:center; gap:6px;
+  }
+  .subject-date .dot { width:4px; height:4px; border-radius:50%; background:var(--text3); }
+  .optional-tag {
+    font-size:10px; font-weight:600; color:#fbbf24;
+    background:rgba(251,191,36,0.1); border-radius:5px;
+    padding:1px 6px; margin-right:2px;
+  }
+
+  .countdown-display { display:flex; gap:8px; }
+  .time-block {
+    flex:1; background:var(--bg2); border-radius:10px; padding:8px 4px;
+    text-align:center; border:1px solid var(--border);
+  }
+  .time-num {
+    font-size:20px; font-weight:700; color:var(--text); line-height:1;
+    font-variant-numeric:tabular-nums; display:block; margin-bottom:2px;
+  }
+  .time-label { font-size:9px; color:var(--text3); letter-spacing:.5px; }
+
+  .confetti-area { display:none; }
+  .subject-card.finished .countdown-display { display:none; }
+  .subject-card.finished .subject-date { display:none; }
+  .subject-card.finished .confetti-area { display:block; }
+
+  .confetti-btn {
+    width:100%; background:rgba(52,211,153,0.08);
+    border:1px dashed rgba(52,211,153,0.4); border-radius:12px;
+    padding:18px; cursor:pointer; font-family:inherit;
+    display:flex; flex-direction:column; align-items:center; gap:5px;
+    transition:all .2s;
+  }
+  .confetti-btn:hover { background:rgba(52,211,153,0.15); transform:scale(1.02); border-color:rgba(52,211,153,0.7); }
+  .confetti-btn:active { transform:scale(0.97); }
+  .confetti-btn .cb-emoji { font-size:28px; }
+  .confetti-btn .cb-text { font-size:12px; color:var(--success); font-weight:600; }
+
+  /* sticky tawfeeq */
+  .sticky-tawfeeq {
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+    z-index:100; display:flex; flex-direction:column; align-items:center; gap:5px;
+  }
+  .tawfeeq-circle {
+    width:68px; height:68px; border-radius:50%;
+    background:var(--accent); border:none;
+    cursor:pointer; font-size:26px;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 24px rgba(108,99,255,0.5);
+    transition:all .2s;
+  }
+  .tawfeeq-circle:hover { transform:scale(1.1); box-shadow:0 6px 32px rgba(108,99,255,0.7); }
+  .tawfeeq-circle:active { transform:scale(0.94); }
+  .tawfeeq-circle.pressed { animation:pop .3s ease; }
+  @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.2)} 100%{transform:scale(1)} }
+  .tawfeeq-badge {
+    background:var(--card); border:1px solid var(--border2);
+    border-radius:20px; padding:3px 12px;
+    font-size:12px; font-weight:600; color:var(--accent2);
+    font-variant-numeric:tabular-nums;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  #confetti-canvas { position:fixed; inset:0; pointer-events:none; z-index:1000; }
+
+  .holiday-overlay {
+    position:fixed; inset:0; z-index:997;
+    background:transparent;
+    display:none; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center; padding:2rem;
+    pointer-events:none;
+  }
+  .holiday-overlay.show { display:flex; }
+  .holiday-text {
+    font-size:clamp(2.5rem, 10vw, 6rem);
+    font-weight:700; color:var(--text);
+    line-height:1.2; margin-bottom:1rem;
+    animation:float 3s ease-in-out infinite;
+  }
+
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+
+  /* toast */
+  .toast {
+    position:fixed; bottom:110px; left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:var(--card); border:1px solid var(--border2); border-radius:50px;
+    padding:10px 22px; font-size:13px; color:var(--text); z-index:1001;
+    opacity:0; transition:opacity .25s ease, transform .25s ease;
+    white-space:nowrap; box-shadow:0 8px 32px rgba(0,0,0,0.25);
+    pointer-events:none;
+  }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+  @media(max-width:500px) {
+    .subjects-grid { grid-template-columns:1fr; }
+    .logo { font-size:1.3rem; }
+  }
+</style>
 </head>
 <body>
+<canvas id="confetti-canvas"></canvas>
+<div class="holiday-overlay" id="holiday-overlay">
+  <div class="holiday-text">إجازة سعيدة 🎊</div>
+</div>
+<div class="toast" id="toast"></div>
 
-    <h1>🚀 لوحة المتابعة الدراسية</h1>
-    <div id="current-date">جاري تحميل التاريخ الحالي...</div>
+<div class="sticky-tawfeeq">
+  <button class="tawfeeq-circle" onclick="pressTawfeeq()" id="btn-tawfeeq" aria-label="الله يوفقنا">🤲</button>
+  <div class="tawfeeq-badge" id="count-tawfeeq">—</div>
+</div>
 
-    <div class="section-title assignments-title">📝 الواجبات والكويزات</div>
-    <div id="taskList" class="grid-container"></div>
+<div class="container">
+  <header>
+    <div class="logo">عداد <span>الايتي</span></div>
+    <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" aria-label="تبديل الثيم">🌙</button>
+  </header>
 
-    <div class="section-title">🎓 الاختبارات النهائية (Finals)</div>
-    <div id="examList" class="grid-container"></div>
+  <div class="subjects-grid" id="subjects-grid"></div>
+</div>
 
-    <script>
-        // Display current date in header
-        const today = new Date();
-        document.getElementById('current-date').innerText = `اليوم: ${today.getDate()} / ${today.getMonth() + 1} / ${today.getFullYear()}`;
+<script>
+const SUBJECTS = [
+  { code:'COE 351', name:'شبكات الحاسب',                  dateHijri:'18-12-1447', dateISO:'2026-06-04', time:'10:30', ampm:'ص', day:'الخميس' },
+  { code:'IT 372',  name:'تنقيب وتخزين البيانات',          dateHijri:'23-12-1447', dateISO:'2026-06-09', time:'08:00', ampm:'ص', day:'الثلاثاء' },
+  { code:'MATH 319',name:'نظرية الترميز والتشفير',         dateHijri:'24-12-1447', dateISO:'2026-06-10', time:'13:00', ampm:'م', day:'الأربعاء', optional:true },
+  { code:'IT 315',  name:'البرمجة الشيئية',                dateHijri:'25-12-1447', dateISO:'2026-06-11', time:'13:00', ampm:'م', day:'الخميس' },
+  { code:'IT 342',  name:'الحوسبة السحابية والمتنقلة',     dateHijri:'28-12-1447', dateISO:'2026-06-14', time:'13:00', ampm:'م', day:'الأحد' },
+  { code:'IT 362',  name:'مهارات اتصال وأخلاقيات المهنة',  dateHijri:'1-1-1448',   dateISO:'2026-06-16', time:'10:30', ampm:'ص', day:'الثلاثاء' },
+];
 
-        // بيانات الواجبات والكويزات (يمكنك تركها فارغة أو إضافة عناصر بها)
-        const tasks = [
-            { name: "كويز شبكات تجريبي", date: "2026-06-05T12:00:00", display: "5 / 6" }
-        ];
+// Abacus API - بديل CountAPI يشتغل بدون تسجيل
+const API_BASE = 'https://abacus.jasoncameron.dev';
+const NS = 'aadat-alIT-1447';
+const ONE_HOUR = 3600000;
 
-        // بيانات الاختبارات النهائية
-        const exams = [
-            { name: "Theory Networks", date: "2026-06-04T08:00:00", display: "4 / 6" },
-            { name: "IOT", date: "2026-06-07T08:00:00", display: "7 / 6" },
-            { name: "Tanqeeb", date: "2026-06-09T08:00:00", display: "9 / 6" },
-            { name: "Theory Programming", date: "2026-06-11T08:00:00", display: "11 / 6" },
-            { name: "Cloud Computing", date: "2026-06-14T08:00:00", display: "14 / 6" },
-            { name: "Ethics", date: "2026-06-16T08:00:00", display: "16 / 6" }
-        ];
+let isLight = localStorage.getItem('theme') === 'light';
+if (isLight) document.documentElement.classList.add('light');
+document.getElementById('theme-btn').textContent = isLight ? '☀️' : '🌙';
 
-        function createCards(data, containerId, cardClass) {
-            const container = document.getElementById(containerId);
-            if (!container || !data || data.length === 0) {
-                if (container) container.innerHTML = `<p style="color: #64748b; grid-column: 1/-1;">لا يوجد مهام حالياً الحلّية حلوة! ✨</p>`;
-                return;
-            }
-            
-            data.forEach((item, index) => {
-                const id = `${containerId}-${index}`;
-                container.innerHTML += `
-                    <div class="card ${cardClass}">
-                        <div class="subject-name">${item.name}</div>
-                        <div class="date-display">موعدنا: ${item.display}</div>
-                        <div class="timer" id="${id}">جاري الحساب...</div>
-                    </div>
-                `;
-                startTimer(item.date, id);
-            });
-        }
+function to12hr(time, ampm) {
+  const [h, m] = time.split(':').map(Number);
+  const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return `${String(h12).padStart(2,'0')}:${String(m).padStart(2,'0')} ${ampm}`;
+}
 
-        function startTimer(targetDate, elementId) {
-            const countDownDate = new Date(targetDate).getTime();
-            
-            // Run instantly once before the interval starts so there's no delay
-            updateTimer(); 
+function examFinished(s) {
+  const examDate = new Date(s.dateISO + 'T' + s.time + ':00').getTime();
+  return (Date.now() - examDate) >= ONE_HOUR;
+}
 
-            const x = setInterval(updateTimer, 1000);
+function renderSubjects() {
+  const grid = document.getElementById('subjects-grid');
+  grid.innerHTML = SUBJECTS.map((s, i) => {
+    const finished = examFinished(s);
+    const examDate = new Date(s.dateISO + 'T' + s.time + ':00').getTime();
+    const diff = examDate - Date.now();
+    const urgent = !finished && diff > 0 && diff < 86400000 * 2;
 
-            function updateTimer() {
-                const now = new Date().getTime();
-                const distance = countDownDate - now;
-                const timerElement = document.getElementById(elementId);
+    return `<div class="subject-card${finished?' finished':''}${urgent?' urgent':''}" data-idx="${i}" id="card-${i}">
+      <span class="subject-code">${s.code}</span>
+      <div class="subject-name">${s.name}</div>
+      <div class="subject-date">
+        <span>${s.day}</span><span class="dot"></span><span>${s.dateHijri}</span><span class="dot"></span>
+        <span>الساعة ${to12hr(s.time, s.ampm)}</span>
+        ${s.optional ? '<span class="optional-tag">اختيارية</span>' : ''}
+      </div>
+      <div class="countdown-display">
+        <div class="time-block"><span class="time-num" id="d-${i}">—</span><span class="time-label">يوم</span></div>
+        <div class="time-block"><span class="time-num" id="h-${i}">—</span><span class="time-label">ساعة</span></div>
+        <div class="time-block"><span class="time-num" id="m-${i}">—</span><span class="time-label">دقيقة</span></div>
+        <div class="time-block"><span class="time-num" id="s-${i}">—</span><span class="time-label">ثانية</span></div>
+      </div>
+      <div class="confetti-area">
+        <button class="confetti-btn" onclick="launchConfetti()">
+          <span class="cb-emoji">🎉</span>
+          <span class="cb-text">انتهى الاختبار! اضغط للاحتفال</span>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
 
-                if (!timerElement) {
-                    clearInterval(x);
-                    return;
-                }
+function updateCountdowns() {
+  const now = Date.now();
+  SUBJECTS.forEach((s, i) => {
+    const card = document.getElementById('card-' + i);
+    if (!card) return;
 
-                if (distance < 0) {
-                    clearInterval(x);
-                    timerElement.innerHTML = "تم التسليم / بدأ الاختبار ✅";
-                    return;
-                }
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                
-                timerElement.innerHTML = `
-                    <div>${days}<span class="time-unit">يوم</span></div>
-                    <div>${hours}<span class="time-unit">ساعة</span></div>
-                    <div>${minutes}<span class="time-unit">دقيقة</span></div>
-                    <div>${seconds}<span class="time-unit">ثانية</span></div>
-                `;
-            }
-        }
+    if (examFinished(s)) {
+      if (!card.classList.contains('finished')) {
+        card.classList.add('finished');
+        card.classList.remove('urgent');
+        launchConfetti();
+        showToast('انتهى اختبار ' + s.name);
+      }
+      return;
+    }
 
-        // تشغيل البطاقات بأمان
-        createCards(tasks, 'taskList', 'task-card');
-        createCards(exams, 'examList', 'exam-card');
-    </script>
+    const examMs = new Date(s.dateISO + 'T' + s.time + ':00').getTime();
+    const diff = examMs - now;
+    if (diff <= 0) return;
+
+    const days  = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins  = Math.floor((diff % 3600000) / 60000);
+    const secs  = Math.floor((diff % 60000) / 1000);
+    const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=String(v).padStart(2,'0'); };
+    set('d-'+i,days); set('h-'+i,hours); set('m-'+i,mins); set('s-'+i,secs);
+    card.classList.toggle('urgent', diff < 86400000 * 2);
+  });
+
+  // لو كل الاختبارات انتهت
+  const allDone = SUBJECTS.every((s) => examFinished(s));
+  const overlay = document.getElementById('holiday-overlay');
+  if (allDone && !overlay.classList.contains('show')) {
+    overlay.classList.add('show');
+    launchInfiniteConfetti();
+  }
+}
+
+async function pressTawfeeq() {
+  const btn = document.getElementById('btn-tawfeeq');
+  const el  = document.getElementById('count-tawfeeq');
+  btn.classList.add('pressed');
+  setTimeout(() => btn.classList.remove('pressed'), 300);
+  showToast('الله يوفق الجميع');
+  try {
+    const r = await fetch(`${API_BASE}/hit/${NS}/tawfeeq`);
+    const d = await r.json();
+    if (d.value != null) el.textContent = d.value.toLocaleString('ar-SA');
+  } catch {}
+}
+
+async function loadCount() {
+  try {
+    const r = await fetch(`${API_BASE}/get/${NS}/tawfeeq`);
+    const d = await r.json();
+    if (d.value != null) document.getElementById('count-tawfeeq').textContent = d.value.toLocaleString('ar-SA');
+  } catch {}
+}
+
+function toggleTheme() {
+  isLight = !isLight;
+  document.documentElement.classList.toggle('light', isLight);
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  document.getElementById('theme-btn').textContent = isLight ? '☀️' : '🌙';
+}
+
+// toast مصلح
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 1000);
+}
+
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const colors = ['#a78bfa','#60a5fa','#34d399','#fb923c','#f472b6','#fbbf24'];
+  const pieces = Array.from({length:180}, () => ({
+    x: Math.random() * canvas.width,
+    y: -10 - Math.random() * 120,
+    r: Math.random() * 7 + 3,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    vx: (Math.random() - 0.5) * 6,
+    vy: Math.random() * 5 + 2,
+    rot: Math.random() * 360,
+    vrot: (Math.random() - 0.5) * 10,
+    life: 1,
+  }));
+  let frame;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    pieces.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.12;
+      p.rot += p.vrot; p.life -= 0.007;
+      if (p.life <= 0 || p.y > canvas.height) return;
+      alive = true;
+      ctx.save();
+      ctx.globalAlpha = p.life;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r * 2.2);
+      ctx.restore();
+    });
+    if (alive) frame = requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  cancelAnimationFrame(frame);
+  draw();
+}
+
+
+function launchInfiniteConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const colors = ['#a78bfa','#60a5fa','#34d399','#fb923c','#f472b6','#fbbf24'];
+  let pieces = [];
+  function addPieces() {
+    for (let i = 0; i < 8; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width, y: -10,
+        r: Math.random() * 7 + 3,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vx: (Math.random() - 0.5) * 5,
+        vy: Math.random() * 4 + 2,
+        rot: Math.random() * 360,
+        vrot: (Math.random() - 0.5) * 8,
+        life: 1,
+      });
+    }
+  }
+  setInterval(addPieces, 200);
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces = pieces.filter(p => p.life > 0 && p.y < canvas.height);
+    pieces.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.1;
+      p.rot += p.vrot; p.life -= 0.005;
+      ctx.save(); ctx.globalAlpha = p.life;
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot * Math.PI / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r * 2.2);
+      ctx.restore();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+renderSubjects();
+updateCountdowns();
+setInterval(updateCountdowns, 1000);
+loadCount();
+setInterval(loadCount, 10000);
+</script>
 </body>
 </html>
