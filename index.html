@@ -136,6 +136,24 @@ header{
 }
 .theme-btn:hover{transform:translateY(-2px) rotate(5deg);border-color:var(--border-strong)}
 
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.term-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:10px 14px;
+  border-radius:14px;
+  background:var(--accent-soft);
+  border:1px solid var(--border-strong);
+  color:var(--accent);
+  font-size:12px;
+  font-weight:700;
+}
+
 .section-title{
   margin:34px 0 17px;
   display:flex;
@@ -314,48 +332,6 @@ header{
 .confetti-btn .cb-emoji{font-size:27px}
 .confetti-btn .cb-text{font-size:12px;font-weight:700}
 
-.sticky-tawfeeq{
-  position:fixed;
-  left:50%;
-  bottom:22px;
-  transform:translateX(-50%);
-  z-index:100;
-  display:flex;
-  align-items:center;
-  gap:11px;
-  padding:8px;
-  border-radius:60px;
-  background:var(--card);
-  border:1px solid var(--border);
-  box-shadow:0 18px 45px rgba(15,23,42,.16);
-  backdrop-filter:blur(22px);
-  -webkit-backdrop-filter:blur(22px);
-}
-
-.tawfeeq-circle{
-  width:58px;height:58px;
-  border:0;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),#06b6d4);
-  color:#fff;
-  cursor:pointer;
-  font-size:25px;
-  display:grid;
-  place-items:center;
-  box-shadow:0 12px 28px rgba(91,92,226,.28);
-  transition:.3s cubic-bezier(.2,.8,.2,1);
-}
-.tawfeeq-circle:hover{transform:translateY(-4px) scale(1.05)}
-.tawfeeq-circle:active{transform:scale(.93)}
-
-.tawfeeq-badge{
-  padding:0 15px 0 8px;
-  color:var(--text2);
-  font-size:11px;
-  font-weight:700;
-  white-space:nowrap;
-}
-
 #confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:1000}
 
 .holiday-overlay{
@@ -381,48 +357,6 @@ header{
   animation:float 3s ease-in-out infinite alternate;
 }
 @keyframes float{to{transform:translateY(-12px)}}
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:105px;
-  transform:translate(-50%,15px);
-  z-index:1001;
-  opacity:0;
-  pointer-events:none;
-  white-space:nowrap;
-  padding:12px 22px;
-  border-radius:50px;
-  background:var(--card-solid);
-  border:1px solid var(--border);
-  color:var(--text);
-  font-size:13px;
-  font-weight:600;
-  box-shadow:var(--shadow);
-  transition:.3s ease;
-}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-
-
-/* ===== Premium Dashboard ===== */
-.dashboard-hero{
-  position:relative;
-  overflow:hidden;
-  min-height:245px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:25px;
-  padding:38px 40px;
-  margin-bottom:18px;
-  border-radius:30px;
-  color:#fff;
-  background:
-    radial-gradient(circle at 85% 20%,rgba(56,189,248,.35),transparent 27%),
-    radial-gradient(circle at 25% 100%,rgba(129,140,248,.28),transparent 35%),
-    linear-gradient(135deg,#3537a7 0%,#5b5ce2 45%,#168bb5 100%);
-  box-shadow:0 25px 70px rgba(61,70,180,.22);
-}
 
 .dashboard-hero::before{
   content:"";
@@ -479,108 +413,13 @@ header{
   transform:rotate(4deg);
 }
 
-.stats-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:13px;
-  margin-bottom:18px;
-}
-.stat-card{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  min-height:92px;
-  padding:16px;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:21px;
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(20px);
-}
-.stat-icon{
-  width:46px;height:46px;
-  flex:none;
-  display:grid;place-items:center;
-  border-radius:15px;
-  font-size:20px;
-}
-.stat-icon.purple{background:rgba(124,131,255,.13)}
-.stat-icon.blue{background:rgba(56,189,248,.13)}
-.stat-icon.green{background:rgba(16,185,129,.13)}
-.stat-icon.orange{background:rgba(251,146,60,.13)}
-.stat-label{display:block;color:var(--text3);font-size:10px;font-weight:600;margin-bottom:4px}
-.stat-card strong{font-size:1.3rem;line-height:1}
-
-.next-exam{
-  position:relative;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-  padding:22px 25px;
-  margin-bottom:28px;
-  border-radius:25px;
-  background:linear-gradient(135deg,rgba(255,255,255,.88),rgba(238,240,255,.82));
-  border:1px solid var(--border-strong);
-  box-shadow:var(--shadow);
-}
-.dark .next-exam{
-  background:linear-gradient(135deg,rgba(30,41,72,.9),rgba(33,42,77,.72));
-}
-.next-exam::before{
-  content:"";
-  position:absolute;
-  width:220px;height:220px;
-  border-radius:50%;
-  background:rgba(91,92,226,.08);
-  left:-100px;top:-120px;
-}
-.next-main{position:relative;z-index:2}
-.next-badge{
-  display:inline-flex;
-  padding:5px 10px;
-  margin-bottom:7px;
-  border-radius:8px;
-  color:var(--accent);
-  background:var(--accent-soft);
-  font-size:10px;
-  font-weight:700;
-}
-.next-exam h2{font-size:1.35rem;margin-bottom:4px}
-.next-meta{color:var(--text2);font-size:11px}
-.next-countdown{
-  display:grid;
-  grid-template-columns:repeat(4,72px);
-  gap:7px;
-  position:relative;
-  z-index:2;
-}
-.next-countdown div{
-  text-align:center;
-  padding:10px 5px;
-  border-radius:14px;
-  background:var(--card-solid);
-  border:1px solid var(--border);
-}
-.next-countdown strong{display:block;font-size:20px;font-variant-numeric:tabular-nums}
-.next-countdown span{font-size:8px;color:var(--text3);font-weight:600}
-
 @media(max-width:800px){
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
   .dashboard-hero{padding:30px 25px}
   .hero-orb{width:95px;height:95px;font-size:43px}
-  .next-exam{align-items:flex-start;flex-direction:column}
-  .next-countdown{width:100%;grid-template-columns:repeat(4,1fr)}
 }
 @media(max-width:520px){
-  .stats-grid{grid-template-columns:repeat(2,1fr);gap:9px}
-  .stat-card{padding:12px;min-height:78px}
-  .stat-icon{width:39px;height:39px;font-size:17px}
-  .stat-card strong{font-size:1.1rem}
   .dashboard-hero{min-height:220px;padding:25px 20px}
   .hero-orb{display:none}
-  .next-countdown{grid-template-columns:repeat(4,1fr)}
 }
 
 @media(max-width:650px){
@@ -591,9 +430,32 @@ header{
   .subjects-grid{grid-template-columns:1fr;gap:14px}
   .subject-card{min-height:220px;padding:19px}
   .section-title{margin-top:27px}
-  .sticky-tawfeeq{bottom:12px}
-  .tawfeeq-circle{width:52px;height:52px}
 }
+
+.term-section-badge{
+  display:inline-flex;
+  align-items:center;
+  padding:5px 9px;
+  border-radius:9px;
+  margin-right:3px;
+  font-size:10px;
+  color:var(--accent);
+  background:var(--accent-soft);
+  border:1px solid var(--border-strong);
+}
+
+
+.extra-title{
+  margin-top:42px;
+  padding-top:8px;
+  border-top:1px solid var(--border);
+}
+.extra-badge{
+  color:#10b981;
+  background:rgba(16,185,129,.10);
+  border-color:rgba(16,185,129,.20);
+}
+
 </style>
 
 </head>
@@ -602,69 +464,34 @@ header{
 <div class="holiday-overlay" id="holiday-overlay">
   <div class="holiday-text">إجازة سعيدة والوعد الـ A+ 🎊</div>
 </div>
-<div class="toast" id="toast"></div>
-
-<div class="sticky-tawfeeq">
-  <button class="tawfeeq-circle" onclick="pressTawfeeq()" id="btn-tawfeeq" aria-label="الله يوفقنا">🤲</button>
-  <div class="tawfeeq-badge" id="count-tawfeeq">—</div>
-</div>
-
 <div class="container">
   <header>
     <div class="logo">عداد <span>الـ IT</span></div>
-    <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" aria-label="تبديل الثيم">🌙</button>
+    <div class="header-actions">
+      <div class="term-badge">🎓 ترم 481</div>
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" aria-label="تبديل الثيم">🌙</button>
+    </div>
   </header>
-
 
   <section class="dashboard-hero">
     <div class="hero-copy">
-      <div class="eyebrow"><span class="eyebrow-dot"></span> لوحة الطالب • 2026 / 2027</div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> لوحة الطالب • ترم 481</div>
       <h1>مستعد للاختبارات؟ <span>خلّنا نجيب الـ A+ 🎯</span></h1>
       <p>كل اختباراتك في مكان واحد، مع عدّاد مباشر لأقرب اختبار ونظرة سريعة على تقدمك.</p>
     </div>
     <div class="hero-orb">💻</div>
   </section>
-
-  <section class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon purple">📚</div>
-      <div><span class="stat-label">إجمالي الاختبارات</span><strong id="stat-total">0</strong></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon blue">⏳</div>
-      <div><div class="stat-label">القادمة</div><strong id="stat-upcoming">0</strong></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon green">✅</div>
-      <div><div class="stat-label">المُنتهية</div><strong id="stat-finished">0</strong></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon orange">🔥</div>
-      <div><div class="stat-label">الأقرب</div><strong id="stat-nearest">—</strong></div>
-    </div>
-  </section>
-
-  <section class="next-exam" id="next-exam">
-    <div class="next-main">
-      <div class="next-badge">⚡ الاختبار القادم</div>
-      <h2 id="next-name">—</h2>
-      <div class="next-meta" id="next-meta">—</div>
-    </div>
-    <div class="next-countdown">
-      <div><strong id="next-days">—</strong><span>يوم</span></div>
-      <div><strong id="next-hours">—</strong><span>ساعة</span></div>
-      <div><strong id="next-mins">—</strong><span>دقيقة</span></div>
-      <div><strong id="next-secs">—</strong><span>ثانية</span></div>
-    </div>
-  </section>
-
-  <!-- قسم اختبارات المنتصف (Midterm) -->
+<!-- قسم اختبارات المنتصف (Midterm) -->
   <div class="section-title">📝 Midterm Exams</div>
   <div class="subjects-grid" id="midterm-grid"></div>
 
-  <!-- قسم الاختبارات النهائية (Final) -->
-  <div class="section-title">🎓 Final Exams</div>
+  <!-- المواد الأساسية -->
+  <div class="section-title">🎓 Final Exams <span class="term-section-badge">ترم 481</span></div>
   <div class="subjects-grid" id="final-grid"></div>
+
+  <!-- المواد التي تمت إضافتها لاحقًا -->
+  <div class="section-title extra-title">📚 مواد إضافية <span class="term-section-badge extra-badge">ترم 481</span></div>
+  <div class="subjects-grid" id="extra-grid"></div>
 </div>
 
 <script>
@@ -678,8 +505,16 @@ const FINAL_EXAMS = [
   { code: 'IT 405', name: 'نظم التجارة الإلكترونية', dateISO: '2027-01-07', time: '08:00', ampm: 'ص', day: 'الخميس' }
 ];
 
-const API_BASE = 'https://abacus.jasoncameron.dev';
-const NS = 'aadat-alIT-1447';
+const EXTRA_EXAMS = [
+  { code: '481-01', name: 'سلم', dateISO: '2026-12-21', hijriDate: '1448/7/12', time: '08:00', timeRange: '08:00 - 10:00 ص', ampm: 'ص', day: 'الإثنين' },
+  { code: '481-02', name: 'سيرة', dateISO: '2026-12-23', hijriDate: '1448/7/14', time: '10:30', timeRange: '10:30 ص - 12:30 م', ampm: 'ص', day: 'الأربعاء' },
+  { code: '481-03', name: 'الأسرة', dateISO: '2026-12-24', hijriDate: '1448/7/15', time: '13:00', timeRange: '01:00 م - 03:00 م', ampm: 'م', day: 'الخميس' },
+  { code: '481-04', name: 'نظام', dateISO: '2026-12-27', hijriDate: '1448/7/18', time: '13:00', timeRange: '01:00 م - 03:00 م', ampm: 'م', day: 'الأحد' },
+  { code: '481-06', name: 'سرية', dateISO: '2026-12-30', hijriDate: '1448/7/21', time: '13:00', timeRange: '01:00 م - 03:00 م', ampm: 'م', day: 'الأربعاء' },
+  { code: '481-05', name: 'تراكيب', dateISO: '2027-01-03', hijriDate: '1448/7/25', time: '08:00', timeRange: '08:00 - 10:00 ص', ampm: 'ص', day: 'الأحد' },
+  { code: '481-07', name: 'تحليل', dateISO: '2027-01-06', hijriDate: '1448/7/28', time: '10:30', timeRange: '10:30 ص - 12:30 م', ampm: 'ص', day: 'الأربعاء' }
+];
+
 const ONE_HOUR = 3600000;
 
 let isLight = localStorage.getItem('theme') !== 'dark';
@@ -697,7 +532,16 @@ function examFinished(s) {
   return (Date.now() - examDate) >= ONE_HOUR;
 }
 
+
+function sortExamsByDate(exams){
+  return [...exams].sort((a,b) =>
+    new Date(a.dateISO + 'T' + a.time + ':00') -
+    new Date(b.dateISO + 'T' + b.time + ':00')
+  );
+}
+
 function buildGridHTML(subjects, prefix) {
+  subjects = sortExamsByDate(subjects);
   if (subjects.length === 0) {
     return `<div class="empty-state">لا توجد اختبارات مضافة حالياً في هذا القسم.</div>`;
   }
@@ -713,8 +557,8 @@ function buildGridHTML(subjects, prefix) {
         <span class="subject-code">${s.code}</span>
         <div class="subject-name">${s.name}</div>
         <div class="subject-date">
-          <span>${s.day}</span><span class="dot"></span><span>${s.dateISO}</span><span class="dot"></span>
-          <span>الساعة ${to12hr(s.time, s.ampm)}</span>
+          <span>${s.day}</span><span class="dot"></span><span>${s.hijriDate || s.dateISO}</span><span class="dot"></span>
+          <span>${s.timeRange ? 'الساعة ' + s.timeRange : 'الساعة ' + to12hr(s.time, s.ampm)}</span>
         </div>
       </div>
       <div class="countdown-display">
@@ -733,60 +577,14 @@ function buildGridHTML(subjects, prefix) {
   }).join('');
 }
 
-
-function getAllExams(){
-  return [...MIDTERM_EXAMS,...FINAL_EXAMS];
-}
-
-function updateDashboard(){
-  const exams=getAllExams();
-  const now=Date.now();
-  const upcoming=exams.filter(s=>!examFinished(s));
-  const finished=exams.filter(s=>examFinished(s));
-  const nearest=upcoming
-    .map(s=>({...s,ms:new Date(s.dateISO+'T'+s.time+':00').getTime()}))
-    .filter(s=>s.ms>now)
-    .sort((a,b)=>a.ms-b.ms)[0];
-
-  document.getElementById('stat-total').textContent=exams.length;
-  document.getElementById('stat-upcoming').textContent=upcoming.length;
-  document.getElementById('stat-finished').textContent=finished.length;
-
-  if(nearest){
-    const diff=nearest.ms-now;
-    document.getElementById('stat-nearest').textContent=
-      diff<86400000 ? 'اليوم' :
-      diff<172800000 ? 'غداً' :
-      Math.ceil(diff/86400000)+' أيام';
-
-    document.getElementById('next-name').textContent=nearest.name;
-    document.getElementById('next-meta').textContent=
-      `${nearest.code}  •  ${nearest.day} ${nearest.dateISO}  •  الساعة ${to12hr(nearest.time,nearest.ampm)}`;
-
-    const days=Math.floor(diff/86400000);
-    const hours=Math.floor((diff%86400000)/3600000);
-    const mins=Math.floor((diff%3600000)/60000);
-    const secs=Math.floor((diff%60000)/1000);
-    document.getElementById('next-days').textContent=String(days).padStart(2,'0');
-    document.getElementById('next-hours').textContent=String(hours).padStart(2,'0');
-    document.getElementById('next-mins').textContent=String(mins).padStart(2,'0');
-    document.getElementById('next-secs').textContent=String(secs).padStart(2,'0');
-  }else{
-    document.getElementById('stat-nearest').textContent='—';
-    document.getElementById('next-name').textContent='خلصنا كل الاختبارات 🎉';
-    document.getElementById('next-meta').textContent='استمتع بالإجازة، والوعد بالـ A+';
-    ['next-days','next-hours','next-mins','next-secs'].forEach(id=>{
-      document.getElementById(id).textContent='00';
-    });
-  }
-}
-
 function renderSubjects() {
   document.getElementById('midterm-grid').innerHTML = buildGridHTML(MIDTERM_EXAMS, 'mid');
   document.getElementById('final-grid').innerHTML = buildGridHTML(FINAL_EXAMS, 'fin');
+  document.getElementById('extra-grid').innerHTML = buildGridHTML(EXTRA_EXAMS, 'extra');
 }
 
 function updateSectionCountdowns(subjects, prefix) {
+  subjects = sortExamsByDate(subjects);
   const now = Date.now();
   subjects.forEach((s, i) => {
     const card = document.getElementById(`${prefix}-card-${i}`);
@@ -797,7 +595,6 @@ function updateSectionCountdowns(subjects, prefix) {
         card.classList.add('finished');
         card.classList.remove('urgent');
         launchConfetti();
-        showToast('انتهى اختبار ' + s.name);
       }
       return;
     }
@@ -822,8 +619,9 @@ function updateSectionCountdowns(subjects, prefix) {
 function updateCountdowns() {
   updateSectionCountdowns(MIDTERM_EXAMS, 'mid');
   updateSectionCountdowns(FINAL_EXAMS, 'fin');
+  updateSectionCountdowns(EXTRA_EXAMS, 'extra');
 
-  const allSubjects = [...MIDTERM_EXAMS, ...FINAL_EXAMS];
+  const allSubjects = [...MIDTERM_EXAMS, ...FINAL_EXAMS, ...EXTRA_EXAMS];
   if (allSubjects.length > 0) {
     const allDone = allSubjects.every((s) => examFinished(s));
     const overlay = document.getElementById('holiday-overlay');
@@ -834,41 +632,11 @@ function updateCountdowns() {
   }
 }
 
-async function pressTawfeeq() {
-  const btn = document.getElementById('btn-tawfeeq');
-  const el  = document.getElementById('count-tawfeeq');
-  btn.classList.add('pressed');
-  setTimeout(() => btn.classList.remove('pressed'), 300);
-  showToast('الله يوفق الجميع 🤍');
-  try {
-    const r = await fetch(`${API_BASE}/hit/${NS}/tawfeeq`);
-    const d = await r.json();
-    if (d.value != null) el.textContent = d.value.toLocaleString('ar-SA') + " دعوة بالتوفيق";
-  } catch {}
-}
-
-async function loadCount() {
-  try {
-    const r = await fetch(`${API_BASE}/get/${NS}/tawfeeq`);
-    const d = await r.json();
-    if (d.value != null) document.getElementById('count-tawfeeq').textContent = d.value.toLocaleString('ar-SA') + " دعوة بالتوفيق";
-  } catch {}
-}
-
 function toggleTheme() {
   isLight = !isLight;
   document.documentElement.classList.toggle('dark', !isLight);
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
   document.getElementById('theme-btn').textContent = isLight ? '☀️' : '🌙';
-}
-
-let toastTimer;
-function showToast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
 }
 
 function launchConfetti() {
@@ -954,8 +722,6 @@ function launchInfiniteConfetti() {
 renderSubjects();
 updateCountdowns();
 setInterval(updateCountdowns, 1000);
-loadCount();
-setInterval(loadCount, 10000);
 </script>
 </body>
 </html>
