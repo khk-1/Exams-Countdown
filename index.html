@@ -58,7 +58,6 @@
     position: relative;
   }
 
-  /* كرات الخلفية السائلة المتحركة (Liquid Background Orbs) */
   body::before, body::after {
     content: ''; position: fixed; width: 50vw; height: 50vw; border-radius: 50%;
     filter: blur(100px); z-index: 0; opacity: 0.6; pointer-events: none;
@@ -84,7 +83,7 @@
     display: flex; 
     align-items: center; 
     justify-content: space-between; 
-    margin-bottom: 3.5rem; 
+    margin-bottom: 2.5rem; 
     border-bottom: 1px solid var(--border);
     padding-bottom: 1.5rem;
     backdrop-filter: blur(5px);
@@ -104,6 +103,18 @@
   }
   .theme-btn:hover { border-color: var(--border2); transform: scale(1.08) rotate(8deg); }
 
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 2.5rem 0 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--accent2);
+    border-right: 4px solid var(--accent);
+    padding-right: 12px;
+  }
+
   .subjects-grid {
     display: grid; 
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -111,7 +122,17 @@
     margin-bottom: 2rem;
   }
 
-  /* بطاقات الزجاج السائل المترابطة */
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2.5rem;
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: 20px;
+    color: var(--text3);
+    font-size: 0.95rem;
+  }
+
   .subject-card {
     background: var(--card); 
     border: 1px solid var(--border); 
@@ -128,7 +149,6 @@
     justify-content: space-between;
   }
   
-  /* لمعان زجاجي علوي ناعم */
   .subject-card::after {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
     background: linear-gradient(rgba(255,255,255,0.05), transparent);
@@ -145,7 +165,6 @@
     box-shadow: 0 30px 60px -15px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255, 255, 255, 0.2);
   }
   
-  /* مؤشر الحالة الجانبي المتوهج */
   .subject-card::before {
     content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%;
     opacity: 0.7; transition: opacity .3s, width 0.3s; z-index: 2;
@@ -156,7 +175,6 @@
   
   @keyframes pulse-glow { 0% { opacity:0.4; filter: drop-shadow(0 0 2px rgba(248,113,113,0.5)); } 100% { opacity:1; filter: drop-shadow(0 0 8px rgba(248,113,113,0.9)); } }
 
-  /* تخصيص تدرجات ألوان ذائبة لكل مادة */
   .subject-card[data-idx="0"]::before { background: #818cf8; }
   .subject-card[data-idx="1"]::before { background: #34d399; }
   .subject-card[data-idx="2"]::before { background: #60a5fa; }
@@ -187,15 +205,7 @@
     display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
   }
   .subject-date .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text3); opacity: 0.6; }
-  
-  .optional-tag {
-    font-size: 11px; font-weight: 600; color: #fbbf24;
-    background: rgba(251,191,36,0.15); border-radius: 8px;
-    padding: 3px 10px; margin-right: auto;
-    border: 1px solid rgba(251,191,36,0.2);
-  }
 
-  /* شاشات العدادات الشفافة */
   .countdown-display { display: flex; gap: 10px; margin-top: auto; position: relative; z-index: 3; }
   
   .time-block {
@@ -230,7 +240,6 @@
   .confetti-btn .cb-emoji { font-size: 28px; }
   .confetti-btn .cb-text { font-size: 13px; color: var(--success); font-weight: 700; }
 
-  /* الكبسولة العائمة الذائبة للدعاء بالتوفيق */
   .sticky-tawfeeq {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
     z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 10px;
@@ -316,17 +325,28 @@
     <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" aria-label="تبديل الثيم">🌙</button>
   </header>
 
-  <div class="subjects-grid" id="subjects-grid"></div>
+  <!-- قسم اختبارات المنتصف (Midterm) -->
+  <div class="section-title">📝 Midterm Exams</div>
+  <div class="subjects-grid" id="midterm-grid"></div>
+
+  <!-- قسم الاختبارات النهائية (Final) -->
+  <div class="section-title">🎓 Final Exams</div>
+  <div class="subjects-grid" id="final-grid"></div>
 </div>
 
 <script>
-const SUBJECTS = [
-  { code:'COE 351', name:'شبكات الحاسب',                   dateISO:'2026-06-04', time:'10:30', ampm:'ص', day:'الخميس' },
-  { code:'MATH 319',name:'علم البيانات',                  dateISO:'2026-06-07', time:'10:30', ampm:'م', day:'الأحد', optional:true },
-  { code:'IT 372',  name:'تنقيب وتخزين البيانات',          dateISO:'2026-06-09', time:'08:00', ampm:'ص', day:'الثلاثاء' },
-  { code:'IT 315',  name:'البرمجة الشيئية',                dateISO:'2026-06-11', time:'13:00', ampm:'م', day:'الخميس' },
-  { code:'IT 342',  name:'الحوسبة السحابية والمتنقلة',     dateISO:'2026-06-14', time:'13:00', ampm:'م', day:'الأحد' },
-  { code:'IT 362',  name:'مهارات اتصال وأخلاقيات المهنة',  dateISO:'2026-06-16', time:'10:30', ampm:'ص', day:'الثلاثاء' },
+// ==========================================
+// قائمة المواد بناءً على الجدول المرفق:
+// ==========================================
+
+const MIDTERM_EXAMS = [];
+
+const FINAL_EXAMS = [
+  { code: 'IT 401', name: 'تشفير', dateISO: '2026-12-27', time: '08:00', ampm: 'ص', day: 'الأحد' },
+  { code: 'IT 402', name: 'لاسلكية', dateISO: '2026-12-30', time: '08:00', ampm: 'ص', day: 'الأربعاء' },
+  { code: 'IT 403', name: 'ضغط البيانات', dateISO: '2027-01-04', time: '08:00', ampm: 'ص', day: 'الإثنين' },
+  { code: 'IT 404', name: 'مواضيع', dateISO: '2027-01-05', time: '08:00', ampm: 'ص', day: 'الثلاثاء' },
+  { code: 'IT 405', name: 'نظم التجارة الإلكترونية', dateISO: '2027-01-07', time: '08:00', ampm: 'ص', day: 'الخميس' }
 ];
 
 const API_BASE = 'https://abacus.jasoncameron.dev';
@@ -348,29 +368,31 @@ function examFinished(s) {
   return (Date.now() - examDate) >= ONE_HOUR;
 }
 
-function renderSubjects() {
-  const grid = document.getElementById('subjects-grid');
-  grid.innerHTML = SUBJECTS.map((s, i) => {
+function buildGridHTML(subjects, prefix) {
+  if (subjects.length === 0) {
+    return `<div class="empty-state">لا توجد اختبارات مضافة حالياً في هذا القسم.</div>`;
+  }
+  return subjects.map((s, i) => {
     const finished = examFinished(s);
     const examDate = new Date(s.dateISO + 'T' + s.time + ':00').getTime();
     const diff = examDate - Date.now();
     const urgent = !finished && diff > 0 && diff < 86400000 * 2;
+    const colorIdx = i % 6;
 
-    return `<div class="subject-card${finished?' finished':''}${urgent?' urgent':''}" data-idx="${i}" id="card-${i}">
+    return `<div class="subject-card${finished?' finished':''}${urgent?' urgent':''}" data-idx="${colorIdx}" id="${prefix}-card-${i}">
       <div class="card-top">
         <span class="subject-code">${s.code}</span>
         <div class="subject-name">${s.name}</div>
         <div class="subject-date">
           <span>${s.day}</span><span class="dot"></span><span>${s.dateISO}</span><span class="dot"></span>
           <span>الساعة ${to12hr(s.time, s.ampm)}</span>
-          ${s.optional ? '<span class="optional-tag">اختيارية</span>' : ''}
         </div>
       </div>
       <div class="countdown-display">
-        <div class="time-block"><span class="time-num" id="d-${i}">—</span><span class="time-label">يوم</span></div>
-        <div class="time-block"><span class="time-num" id="h-${i}">—</span><span class="time-label">ساعة</span></div>
-        <div class="time-block"><span class="time-num" id="m-${i}">—</span><span class="time-label">دقيقة</span></div>
-        <div class="time-block"><span class="time-num" id="s-${i}">—</span><span class="time-label">ثانية</span></div>
+        <div class="time-block"><span class="time-num" id="${prefix}-d-${i}">—</span><span class="time-label">يوم</span></div>
+        <div class="time-block"><span class="time-num" id="${prefix}-h-${i}">—</span><span class="time-label">ساعة</span></div>
+        <div class="time-block"><span class="time-num" id="${prefix}-m-${i}">—</span><span class="time-label">دقيقة</span></div>
+        <div class="time-block"><span class="time-num" id="${prefix}-s-${i}">—</span><span class="time-label">ثانية</span></div>
       </div>
       <div class="confetti-area">
         <button class="confetti-btn" onclick="launchConfetti()">
@@ -382,10 +404,15 @@ function renderSubjects() {
   }).join('');
 }
 
-function updateCountdowns() {
+function renderSubjects() {
+  document.getElementById('midterm-grid').innerHTML = buildGridHTML(MIDTERM_EXAMS, 'mid');
+  document.getElementById('final-grid').innerHTML = buildGridHTML(FINAL_EXAMS, 'fin');
+}
+
+function updateSectionCountdowns(subjects, prefix) {
   const now = Date.now();
-  SUBJECTS.forEach((s, i) => {
-    const card = document.getElementById('card-' + i);
+  subjects.forEach((s, i) => {
+    const card = document.getElementById(`${prefix}-card-${i}`);
     if (!card) return;
 
     if (examFinished(s)) {
@@ -407,15 +434,26 @@ function updateCountdowns() {
     const mins  = Math.floor((diff % 3600000) / 60000);
     const secs  = Math.floor((diff % 60000) / 1000);
     const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=String(v).padStart(2,'0'); };
-    set('d-'+i,days); set('h-'+i,hours); set('m-'+i,mins); set('s-'+i,secs);
+    set(`${prefix}-d-${i}`, days);
+    set(`${prefix}-h-${i}`, hours);
+    set(`${prefix}-m-${i}`, mins);
+    set(`${prefix}-s-${i}`, secs);
     card.classList.toggle('urgent', diff < 86400000 * 2);
   });
+}
 
-  const allDone = SUBJECTS.every((s) => examFinished(s));
-  const overlay = document.getElementById('holiday-overlay');
-  if (allDone && !overlay.classList.contains('show')) {
-    overlay.classList.add('show');
-    launchInfiniteConfetti();
+function updateCountdowns() {
+  updateSectionCountdowns(MIDTERM_EXAMS, 'mid');
+  updateSectionCountdowns(FINAL_EXAMS, 'fin');
+
+  const allSubjects = [...MIDTERM_EXAMS, ...FINAL_EXAMS];
+  if (allSubjects.length > 0) {
+    const allDone = allSubjects.every((s) => examFinished(s));
+    const overlay = document.getElementById('holiday-overlay');
+    if (allDone && !overlay.classList.contains('show')) {
+      overlay.classList.add('show');
+      launchInfiniteConfetti();
+    }
   }
 }
 
@@ -443,7 +481,7 @@ async function loadCount() {
 function toggleTheme() {
   isLight = !isLight;
   document.documentElement.classList.toggle('light', isLight);
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  localStorage.setItem('theme', isLight ? 'dark' : 'light');
   document.getElementById('theme-btn').textContent = isLight ? '☀️' : '🌙';
 }
 
